@@ -38,3 +38,24 @@
     position: relative;
     top: 2.25em;
 }
+
+.dragging {
+    opacity: 0.5;
+}
+
+.drop-target {
+    opacity: 0.5;
+}
+
+.center-card-back {
+    position: absolute;
+    top: 1.75em;
+    left: 2em;
+}
+
+.stock {
+    background-color: blue;
+    width: 4em;
+    height: 4.4em;
+    color: white;
+}
