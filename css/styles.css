@@ -47,6 +47,10 @@
     opacity: 0.5;
 }
 
+.selected {
+    opacity: 0.5;
+}
+
 .center-card-back {
     position: absolute;
     top: 1.75em;

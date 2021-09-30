@@ -11,13 +11,13 @@ devils_grip.actions.engine.drag.board.advance = (function (){var method_table__4
 var prefer_table__4702__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 var method_cache__4703__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 var cached_hierarchy__4704__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
-var hierarchy__4705__auto__ = cljs.core.get.cljs$core$IFn$_invoke$arity$3(cljs.core.PersistentArrayMap.EMPTY,cljs.core.cst$kw$hierarchy,(function (){var fexpr__13476 = cljs.core.get_global_hierarchy;
-return (fexpr__13476.cljs$core$IFn$_invoke$arity$0 ? fexpr__13476.cljs$core$IFn$_invoke$arity$0() : fexpr__13476.call(null));
+var hierarchy__4705__auto__ = cljs.core.get.cljs$core$IFn$_invoke$arity$3(cljs.core.PersistentArrayMap.EMPTY,cljs.core.cst$kw$hierarchy,(function (){var fexpr__13456 = cljs.core.get_global_hierarchy;
+return (fexpr__13456.cljs$core$IFn$_invoke$arity$0 ? fexpr__13456.cljs$core$IFn$_invoke$arity$0() : fexpr__13456.call(null));
 })());
-return (new cljs.core.MultiFn(cljs.core.symbol.cljs$core$IFn$_invoke$arity$2("devils-grip.actions.engine.drag.board","advance"),(function (p__13477){
-var map__13478 = p__13477;
-var map__13478__$1 = cljs.core.__destructure_map(map__13478);
-var action_state = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__13478__$1,cljs.core.cst$kw$action_DASH_state);
+return (new cljs.core.MultiFn(cljs.core.symbol.cljs$core$IFn$_invoke$arity$2("devils-grip.actions.engine.drag.board","advance"),(function (p__13457){
+var map__13458 = p__13457;
+var map__13458__$1 = cljs.core.__destructure_map(map__13458);
+var action_state = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__13458__$1,cljs.core.cst$kw$action_DASH_state);
 return cljs.core.count(cljs.core.cst$kw$selections.cljs$core$IFn$_invoke$arity$1(action_state));
 }),cljs.core.cst$kw$default,hierarchy__4705__auto__,method_table__4701__auto__,prefer_table__4702__auto__,method_cache__4703__auto__,cached_hierarchy__4704__auto__));
 })();
