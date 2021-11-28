@@ -1,53 +1,48 @@
-// Compiled by ClojureScript 1.10.879 {:static-fns true, :optimize-constants true, :optimizations :advanced}
+// Compiled by ClojureScript 1.10.879 {:optimizations :none}
 goog.provide('devils_grip.actions.engine.drag.board');
 goog.require('cljs.core');
-goog.require('cljs.core.constants');
 goog.require('devils_grip.actions.engine.merge_cells');
 goog.require('devils_grip.actions.engine.swap_cells');
 goog.require('devils_grip.rules');
 if((typeof devils_grip !== 'undefined') && (typeof devils_grip.actions !== 'undefined') && (typeof devils_grip.actions.engine !== 'undefined') && (typeof devils_grip.actions.engine.drag !== 'undefined') && (typeof devils_grip.actions.engine.drag.board !== 'undefined') && (typeof devils_grip.actions.engine.drag.board.advance !== 'undefined')){
 } else {
-devils_grip.actions.engine.drag.board.advance = (function (){var method_table__4701__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
-var prefer_table__4702__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
-var method_cache__4703__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
-var cached_hierarchy__4704__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
-var hierarchy__4705__auto__ = cljs.core.get.cljs$core$IFn$_invoke$arity$3(cljs.core.PersistentArrayMap.EMPTY,cljs.core.cst$kw$hierarchy,(function (){var fexpr__13509 = cljs.core.get_global_hierarchy;
-return (fexpr__13509.cljs$core$IFn$_invoke$arity$0 ? fexpr__13509.cljs$core$IFn$_invoke$arity$0() : fexpr__13509.call(null));
-})());
-return (new cljs.core.MultiFn(cljs.core.symbol.cljs$core$IFn$_invoke$arity$2("devils-grip.actions.engine.drag.board","advance"),(function (p__13510){
-var map__13511 = p__13510;
-var map__13511__$1 = cljs.core.__destructure_map(map__13511);
-var action_state = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__13511__$1,cljs.core.cst$kw$action_DASH_state);
-return cljs.core.count(cljs.core.cst$kw$selections.cljs$core$IFn$_invoke$arity$1(action_state));
-}),cljs.core.cst$kw$default,hierarchy__4705__auto__,method_table__4701__auto__,prefer_table__4702__auto__,method_cache__4703__auto__,cached_hierarchy__4704__auto__));
+devils_grip.actions.engine.drag.board.advance = (function (){var method_table__4701__auto__ = cljs.core.atom.call(null,cljs.core.PersistentArrayMap.EMPTY);
+var prefer_table__4702__auto__ = cljs.core.atom.call(null,cljs.core.PersistentArrayMap.EMPTY);
+var method_cache__4703__auto__ = cljs.core.atom.call(null,cljs.core.PersistentArrayMap.EMPTY);
+var cached_hierarchy__4704__auto__ = cljs.core.atom.call(null,cljs.core.PersistentArrayMap.EMPTY);
+var hierarchy__4705__auto__ = cljs.core.get.call(null,cljs.core.PersistentArrayMap.EMPTY,new cljs.core.Keyword(null,"hierarchy","hierarchy",-1053470341),cljs.core.get_global_hierarchy.call(null));
+return (new cljs.core.MultiFn(cljs.core.symbol.call(null,"devils-grip.actions.engine.drag.board","advance"),(function (p__9559){
+var map__9560 = p__9559;
+var map__9560__$1 = cljs.core.__destructure_map.call(null,map__9560);
+var action_state = cljs.core.get.call(null,map__9560__$1,new cljs.core.Keyword(null,"action-state","action-state",-1575944631));
+return cljs.core.count.call(null,new cljs.core.Keyword(null,"selections","selections",-1277610233).cljs$core$IFn$_invoke$arity$1(action_state));
+}),new cljs.core.Keyword(null,"default","default",-1987822328),hierarchy__4705__auto__,method_table__4701__auto__,prefer_table__4702__auto__,method_cache__4703__auto__,cached_hierarchy__4704__auto__));
 })();
 }
 
-devils_grip.actions.engine.drag.board.advance.cljs$core$IMultiFn$_add_method$arity$3(null,(0),(function (state_map__13405__auto__){
-var fexpr__13512 = (function (state_map){
-return cljs.core.update_in.cljs$core$IFn$_invoke$arity$3(state_map,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$action_DASH_state,cljs.core.cst$kw$selections], null),cljs.core.constantly(cljs.core.PersistentVector.EMPTY));
-});
-return fexpr__13512(state_map__13405__auto__);
+cljs.core._add_method.call(null,devils_grip.actions.engine.drag.board.advance,(0),(function (state_map__9489__auto__){
+return (function (state_map){
+return cljs.core.update_in.call(null,state_map,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"action-state","action-state",-1575944631),new cljs.core.Keyword(null,"selections","selections",-1277610233)], null),cljs.core.constantly.call(null,cljs.core.PersistentVector.EMPTY));
+}).call(null,state_map__9489__auto__);
 }));
 
-devils_grip.actions.engine.drag.board.advance.cljs$core$IMultiFn$_add_method$arity$3(null,(1),(function (state_map__13405__auto__){
-var fexpr__13513 = (function (state_map){
+cljs.core._add_method.call(null,devils_grip.actions.engine.drag.board.advance,(1),(function (state_map__9489__auto__){
+return (function (state_map){
 return state_map;
-});
-return fexpr__13513(state_map__13405__auto__);
+}).call(null,state_map__9489__auto__);
 }));
 
-devils_grip.actions.engine.drag.board.advance.cljs$core$IMultiFn$_add_method$arity$3(null,(2),(function (state_map__13405__auto__){
-var fexpr__13514 = (function (state_map){
-var new_state_map = devils_grip.rules.validate((devils_grip.actions.engine.merge_cells.advance.cljs$core$IFn$_invoke$arity$1 ? devils_grip.actions.engine.merge_cells.advance.cljs$core$IFn$_invoke$arity$1(state_map) : devils_grip.actions.engine.merge_cells.advance.call(null,state_map)));
-return cljs.core.assoc.cljs$core$IFn$_invoke$arity$3((cljs.core.truth_(cljs.core.cst$kw$error.cljs$core$IFn$_invoke$arity$1(new_state_map))?(devils_grip.actions.engine.swap_cells.advance.cljs$core$IFn$_invoke$arity$1 ? devils_grip.actions.engine.swap_cells.advance.cljs$core$IFn$_invoke$arity$1(state_map) : devils_grip.actions.engine.swap_cells.advance.call(null,state_map)):new_state_map),cljs.core.cst$kw$action_DASH_state,cljs.core.PersistentArrayMap.EMPTY);
-});
-return fexpr__13514(state_map__13405__auto__);
+cljs.core._add_method.call(null,devils_grip.actions.engine.drag.board.advance,(2),(function (state_map__9489__auto__){
+return (function (state_map){
+var new_state_map = devils_grip.rules.validate.call(null,devils_grip.actions.engine.merge_cells.advance.call(null,state_map));
+return cljs.core.assoc.call(null,(cljs.core.truth_(new cljs.core.Keyword(null,"error","error",-978969032).cljs$core$IFn$_invoke$arity$1(new_state_map))?devils_grip.actions.engine.swap_cells.advance.call(null,state_map):new_state_map),new cljs.core.Keyword(null,"action-state","action-state",-1575944631),cljs.core.PersistentArrayMap.EMPTY);
+}).call(null,state_map__9489__auto__);
 }));
 
-devils_grip.actions.engine.drag.board.advance.cljs$core$IMultiFn$_add_method$arity$3(null,cljs.core.cst$kw$default,(function (state_map__13405__auto__){
-var fexpr__13515 = (function (state_map){
-return cljs.core.assoc.cljs$core$IFn$_invoke$arity$3(state_map,cljs.core.cst$kw$action_DASH_state,cljs.core.PersistentArrayMap.EMPTY);
-});
-return fexpr__13515(state_map__13405__auto__);
+cljs.core._add_method.call(null,devils_grip.actions.engine.drag.board.advance,new cljs.core.Keyword(null,"default","default",-1987822328),(function (state_map__9489__auto__){
+return (function (state_map){
+return cljs.core.assoc.call(null,state_map,new cljs.core.Keyword(null,"action-state","action-state",-1575944631),cljs.core.PersistentArrayMap.EMPTY);
+}).call(null,state_map__9489__auto__);
 }));
+
+//# sourceMappingURL=board.js.map

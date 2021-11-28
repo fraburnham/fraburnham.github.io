@@ -11,40 +11,40 @@ devils_grip.cards.drop_nth = (function devils_grip$cards$drop_nth(n,col){
 return cljs.core.concat.cljs$core$IFn$_invoke$arity$2(cljs.core.take.cljs$core$IFn$_invoke$arity$2(n,col),cljs.core.drop.cljs$core$IFn$_invoke$arity$2((n + (1)),col));
 });
 devils_grip.cards.random_index = (function devils_grip$cards$random_index(total_count){
-var G__13371 = (cljs.core.rand.cljs$core$IFn$_invoke$arity$0() * total_count);
-return Math.floor(G__13371);
+var G__10753 = (cljs.core.rand.cljs$core$IFn$_invoke$arity$0() * total_count);
+return Math.floor(G__10753);
 });
 devils_grip.cards.make_stock = (function devils_grip$cards$make_stock(num_decks){
 return cljs.core.mapcat.cljs$core$IFn$_invoke$arity$variadic((function (_){
-var iter__4611__auto__ = (function devils_grip$cards$make_stock_$_iter__13372(s__13373){
+var iter__4611__auto__ = (function devils_grip$cards$make_stock_$_iter__10754(s__10755){
 return (new cljs.core.LazySeq(null,(function (){
-var s__13373__$1 = s__13373;
+var s__10755__$1 = s__10755;
 while(true){
-var temp__5720__auto__ = cljs.core.seq(s__13373__$1);
+var temp__5720__auto__ = cljs.core.seq(s__10755__$1);
 if(temp__5720__auto__){
 var xs__6277__auto__ = temp__5720__auto__;
 var suit = cljs.core.first(xs__6277__auto__);
-var iterys__4607__auto__ = ((function (s__13373__$1,suit,xs__6277__auto__,temp__5720__auto__){
-return (function devils_grip$cards$make_stock_$_iter__13372_$_iter__13374(s__13375){
-return (new cljs.core.LazySeq(null,((function (s__13373__$1,suit,xs__6277__auto__,temp__5720__auto__){
+var iterys__4607__auto__ = ((function (s__10755__$1,suit,xs__6277__auto__,temp__5720__auto__){
+return (function devils_grip$cards$make_stock_$_iter__10754_$_iter__10756(s__10757){
+return (new cljs.core.LazySeq(null,((function (s__10755__$1,suit,xs__6277__auto__,temp__5720__auto__){
 return (function (){
-var s__13375__$1 = s__13375;
+var s__10757__$1 = s__10757;
 while(true){
-var temp__5720__auto____$1 = cljs.core.seq(s__13375__$1);
+var temp__5720__auto____$1 = cljs.core.seq(s__10757__$1);
 if(temp__5720__auto____$1){
-var s__13375__$2 = temp__5720__auto____$1;
-if(cljs.core.chunked_seq_QMARK_(s__13375__$2)){
-var c__4609__auto__ = cljs.core.chunk_first(s__13375__$2);
+var s__10757__$2 = temp__5720__auto____$1;
+if(cljs.core.chunked_seq_QMARK_(s__10757__$2)){
+var c__4609__auto__ = cljs.core.chunk_first(s__10757__$2);
 var size__4610__auto__ = cljs.core.count(c__4609__auto__);
-var b__13377 = cljs.core.chunk_buffer(size__4610__auto__);
-if((function (){var i__13376 = (0);
+var b__10759 = cljs.core.chunk_buffer(size__4610__auto__);
+if((function (){var i__10758 = (0);
 while(true){
-if((i__13376 < size__4610__auto__)){
-var rank = cljs.core._nth.cljs$core$IFn$_invoke$arity$2(c__4609__auto__,i__13376);
-cljs.core.chunk_append(b__13377,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [suit,rank], null));
+if((i__10758 < size__4610__auto__)){
+var rank = cljs.core._nth.cljs$core$IFn$_invoke$arity$2(c__4609__auto__,i__10758);
+cljs.core.chunk_append(b__10759,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [suit,rank], null));
 
-var G__13378 = (i__13376 + (1));
-i__13376 = G__13378;
+var G__10760 = (i__10758 + (1));
+i__10758 = G__10760;
 continue;
 } else {
 return true;
@@ -52,29 +52,29 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons(cljs.core.chunk(b__13377),devils_grip$cards$make_stock_$_iter__13372_$_iter__13374(cljs.core.chunk_rest(s__13375__$2)));
+return cljs.core.chunk_cons(cljs.core.chunk(b__10759),devils_grip$cards$make_stock_$_iter__10754_$_iter__10756(cljs.core.chunk_rest(s__10757__$2)));
 } else {
-return cljs.core.chunk_cons(cljs.core.chunk(b__13377),null);
+return cljs.core.chunk_cons(cljs.core.chunk(b__10759),null);
 }
 } else {
-var rank = cljs.core.first(s__13375__$2);
-return cljs.core.cons(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [suit,rank], null),devils_grip$cards$make_stock_$_iter__13372_$_iter__13374(cljs.core.rest(s__13375__$2)));
+var rank = cljs.core.first(s__10757__$2);
+return cljs.core.cons(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [suit,rank], null),devils_grip$cards$make_stock_$_iter__10754_$_iter__10756(cljs.core.rest(s__10757__$2)));
 }
 } else {
 return null;
 }
 break;
 }
-});})(s__13373__$1,suit,xs__6277__auto__,temp__5720__auto__))
+});})(s__10755__$1,suit,xs__6277__auto__,temp__5720__auto__))
 ,null,null));
-});})(s__13373__$1,suit,xs__6277__auto__,temp__5720__auto__))
+});})(s__10755__$1,suit,xs__6277__auto__,temp__5720__auto__))
 ;
 var fs__4608__auto__ = cljs.core.seq(iterys__4607__auto__(devils_grip.cards.ranks));
 if(fs__4608__auto__){
-return cljs.core.concat.cljs$core$IFn$_invoke$arity$2(fs__4608__auto__,devils_grip$cards$make_stock_$_iter__13372(cljs.core.rest(s__13373__$1)));
+return cljs.core.concat.cljs$core$IFn$_invoke$arity$2(fs__4608__auto__,devils_grip$cards$make_stock_$_iter__10754(cljs.core.rest(s__10755__$1)));
 } else {
-var G__13379 = cljs.core.rest(s__13373__$1);
-s__13373__$1 = G__13379;
+var G__10761 = cljs.core.rest(s__10755__$1);
+s__10755__$1 = G__10761;
 continue;
 }
 } else {
@@ -88,8 +88,8 @@ return iter__4611__auto__(devils_grip.cards.suits);
 }),cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([cljs.core.range.cljs$core$IFn$_invoke$arity$1(num_decks)], 0));
 });
 devils_grip.cards.shuffle_stock = (function devils_grip$cards$shuffle_stock(var_args){
-var G__13381 = arguments.length;
-switch (G__13381) {
+var G__10763 = arguments.length;
+switch (G__10763) {
 case 1:
 return devils_grip.cards.shuffle_stock.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -120,10 +120,10 @@ return stock;
 
 (devils_grip.cards.shuffle_stock.cljs$lang$maxFixedArity = 2);
 
-devils_grip.cards.rank__GT_value = (function devils_grip$cards$rank__GT_value(p__13383){
-var vec__13384 = p__13383;
-var suit = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__13384,(0),null);
-var rank = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__13384,(1),null);
+devils_grip.cards.rank__GT_value = (function devils_grip$cards$rank__GT_value(p__10765){
+var vec__10766 = p__10765;
+var suit = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__10766,(0),null);
+var rank = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__10766,(1),null);
 return cljs.core.get.cljs$core$IFn$_invoke$arity$3(devils_grip.cards._rank__GT_value,rank,cljs.core.name(rank));
 });
 devils_grip.cards.merge_cards = (function devils_grip$cards$merge_cards(existing_cards,new_cards){
