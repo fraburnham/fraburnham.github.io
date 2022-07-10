@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-10 Sun 12:21 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Frank Burnham" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2d67913">1. Hello <code>chrdev</code></a>
+<ul>
+<li><a href="#orgd06b7b4">1.1. Loading and Unloading the Module</a>
+<ul>
+<li><a href="#org5d155c3">1.1.1. Structs and Macros</a></li>
+<li><a href="#orgf951c6c">1.1.2. Major Number Parameter</a></li>
+<li><a href="#orgebe3a66">1.1.3. Loading</a></li>
+<li><a href="#org0a3f5b4">1.1.4. Unloading</a></li>
+</ul>
+</li>
+<li><a href="#orgafa4c0b">1.2. <span class="todo TODO">TODO</span> Opening and Closing a Device</a>
+<ul>
+<li><a href="#orgb6068c8">1.2.1. <span class="todo TODO">TODO</span> Opening</a></li>
+<li><a href="#org2121827">1.2.2. <span class="todo TODO">TODO</span> Closing</a></li>
+</ul>
+</li>
+<li><a href="#org6979966">1.3. <span class="todo TODO">TODO</span> Reading and Writing Devices</a>
+<ul>
+<li><a href="#org38943a3">1.3.1. <span class="todo TODO">TODO</span> Reading</a></li>
+<li><a href="#org5b198bc">1.3.2. <span class="todo TODO">TODO</span> Writing</a></li>
+</ul>
+</li>
+<li><a href="#org40851cc">1.4. <span class="todo TODO">TODO</span> Building the Module</a>
+<ul>
+<li><a href="#org48c9c25">1.4.1. <span class="todo TODO">TODO</span> <code>Makefile</code></a></li>
+</ul>
+</li>
+<li><a href="#org4e5f50f">1.5. <span class="todo TODO">TODO</span> Using It!</a>
+<ul>
+<li><a href="#orga1f72db">1.5.1. <span class="todo TODO">TODO</span> <code>hello-dev-load.sh</code></a></li>
+<li><a href="#org5d1fc90">1.5.2. <span class="todo TODO">TODO</span> <code>hello-dev-unload.sh</code></a></li>
+<li><a href="#org52ae1c7">1.5.3. <span class="todo TODO">TODO</span> Interacting with the Device File</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2d67913" class="outline-2">
+<h2 id="org2d67913"><span class="section-number-2">1</span> Hello <code>chrdev</code></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+A learning module created by simplifying the scull module presented in chapter 3 of <i>Linux Device Drivers 3rd ed</i>.
+</p>
+
+<p>
+<code>cat /dev/hello-dev0</code> will output "Hello world" once the module has been loaded. Any user can write to the device to update the greeting like <code>echo -n "Bob" &gt; /dev/hello-dev0</code>.
+After which <code>cat /dev/hello-dev0</code> will output "Hello Bob".
+</p>
+</div>
+
+<div id="outline-container-orgd06b7b4" class="outline-3">
+<h3 id="orgd06b7b4"><span class="section-number-3">1.1</span> Loading and Unloading the Module</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org5d155c3" class="outline-4">
+<h4 id="org5d155c3"><span class="section-number-4">1.1.1</span> Structs and Macros</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+We need to set up some things so that our "Hello" greeting can have a <code>target</code> other than "world".
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgae9adf2"><span style="color: #828997;">#if</span><span style="color: #828997; font-weight: bold;">n</span><span style="color: #828997;">def</span> TARGET_MAX_LEN
+<span style="color: #828997;">#define</span> <span style="color: #E06C75;">TARGET_MAX_LEN</span> 64
+<span style="color: #828997;">#endif</span>
+</pre>
+</div>
+
+<p>
+<code>TARGET_MAX_LEN</code> is the maximum length of the name we'll store. This <i>could</i> be set up as a load time parameter. However, since how the driver's major version is passed
+at load time is an example of a module parameter, a compile time parameter is simpler and sufficient here.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org388e7da"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span> {
+  <span style="color: #E5C07B;">char</span> <span style="color: #E06C75;">target</span>[TARGET_MAX_LEN + 1];
+  <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cdev</span> <span style="color: #E06C75;">cdev</span>;
+};
+</pre>
+</div>
+
+<p>
+The <code>hello_dev</code> struct will be used later to keep the <code>target</code>, initially "world", associated with a specific device. This pattern enables creating multiple devices,
+like <code>/dev/hello-dev0</code> and <code>/dev/hello-dev1</code>, that each have independent state. This makes it easier to transition from a single device to multiple devices.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf951c6c" class="outline-4">
+<h4 id="orgf951c6c"><span class="section-number-4">1.1.2</span> Major Number Parameter</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+Each device has a major and minor number. The major is used by the kernel to determine which driver manages a devices. The minor is used to distinguish devices that
+are managed by the same driver. The major and minor numbers can be seen in <code>ls -l /dev/null</code> output.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">$ ls -l /dev/null
+crw-rw-rw- 1 root root 1, 3 Jun 29 17:51 /dev/null
+</pre>
+</div>
+
+<p>
+In this case the major number is 1 and the minor number is 3. We can check in <code>/proc/devices</code> to see what driver manages <code>/dev/null</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">$ grep <span style="color: #98C379;">" 1 "</span> /proc/devices
+ 1 mem
+</pre>
+</div>
+
+<p>
+We see that the <code>mem</code> driver handles <code>/dev/null</code> on this system.
+</p>
+
+<p>
+Using a fixed major number can cause driver conflicts down the road, but being flexible is not without issue. We won't know what the major number is until after the
+module is loaded so we can't create nodes in <code>/dev</code> before the module is loaded. The scull driver is not opinionated here. It allows setting the major number at compile 
+time or load time and it will get a major number dynamically if one isn't set in advance. To keep things simpler this driver only allows a dynamic major number. We'll 
+account for it the same way the <code>scull_load</code> does in <code>hello-dev-load.sh</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgac4714d"><span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">hello_major</span> = 0;
+<span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">hello_minor</span> = 0;
+</pre>
+</div>
+
+<p>
+We'll use these globals to store the major and minor numbers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgebe3a66" class="outline-4">
+<h4 id="orgebe3a66"><span class="section-number-4">1.1.3</span> Loading</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+To be useful our driver needs to get a major number and initialize the state for the devices when it is loaded.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org88bdb08"><span style="color: #E5C07B;">dev_t</span> <span style="color: #E06C75;">dev</span>;
+<span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">result</span> = 0;
+
+result = alloc_chrdev_region(&amp;dev, hello_minor, 1, <span style="color: #98C379;">"hello-dev"</span>);
+hello_major = MAJOR(dev);
+
+<span style="color: #C678DD;">if</span> (result &lt; 0) {
+  printk(KERN_WARNING <span style="color: #98C379;">"hello: can't get major %d"</span>, hello_major);
+  <span style="color: #C678DD;">return</span> result;
+}
+</pre>
+</div>
+
+<p>
+To get a major number for our driver we'll call <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-alloc-chrdev-region.html"><code>alloc_chrdev_region</code></a>, failing if the <code>result</code> of that call is negative.
+</p>
+
+<p>
+<code>alloc_chrdev_region</code> needs:
+</p>
+<ol class="org-ol">
+<li>A place to store the result. We're using <code>dev_t dev</code>. <code>dev_t</code> is an integer type that represents the major and minor numbers for a device.</li>
+<li>The first minor number to use. We've set <code>hello_minor = 0</code> above.</li>
+<li>The number of devices to create.</li>
+<li>A string name for the driver that will manage the devices. We'll use this later when we check for the major number in <code>/proc/devices</code></li>
+</ol>
+
+
+<p>
+The <code>MAJOR</code> macro gets the major number from <code>dev</code> so it can be stored.
+</p>
+
+<p>
+Now that we've got a major number we can prepare the device!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org187319f"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span> *<span style="color: #E06C75;">device</span>;
+</pre>
+</div>
+
+<p>
+<code>device</code> gives us a global place to keep track of where the state for devices is in memory. If we were using more than one device we'd use an array of 
+<code>struct hello_dev *</code> here instead.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org49cda3c">device = kmalloc(<span style="color: #C678DD;">sizeof</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span>), GFP_KERNEL);
+<span style="color: #C678DD;">if</span> (<span style="color: #56B6C2; font-weight: bold;">!</span>device) {
+  result = -ENOMEM;
+ }
+<span style="color: #61AFEF;">memset</span>(device, 0, <span style="color: #C678DD;">sizeof</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span>));
+</pre>
+</div>
+
+<p>
+We allocate some space to store the state using <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-kmalloc.html"><code>kmalloc</code></a>. We'll have to free it when the module is unloaded. If the allocation fails we'll return a no memory error.
+We also make sure to zero the memory out using <code>memset</code> because kernel memory is shared between modules. Zeroing reduces the risk that some secret data will get leaked.
+</p>
+
+<p>
+<code>kmalloc</code> needs:
+</p>
+<ol class="org-ol">
+<li>The number of bytes to allocate. We need enough to store an instance of <code>struct hello_dev</code>.</li>
+<li>The type of memory to allocate. All we need for now is normal kernel ram.</li>
+</ol>
+
+
+<div class="org-src-container">
+<pre class="src src-c" id="org1fde12e"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">file_operations</span> <span style="color: #E06C75;">hello_fops</span> = {
+  .owner = THIS_MODULE,
+  .read = hello_read,
+  .write = hello_write,
+  .open = hello_open,
+  .release = hello_release,
+};
+</pre>
+</div>
+
+<p>
+We'll implement these functions later so that our driver can provide read and write capability.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org9aa444b">cdev_init(&amp;device-&gt;cdev, &amp;hello_fops);
+device-&gt;cdev.owner = THIS_MODULE;
+device-&gt;cdev.ops = &amp;hello_fops;
+</pre>
+</div>
+
+<p>
+We set the device up by initializing it with <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-cdev-init.html"><code>cdev_init</code></a> since we're embedding a <code>struct cdev</code> in the <code>struct hello_dev</code>. Once initalized we set the <code>owner</code> and point
+<code>ops</code> at a <code>struct file_operations</code> which points at functions to call for things like reading and writing from the device. <code>THIS_MODULE</code> is a kernel macro that points
+to the running module.
+</p>
+
+<p>
+<code>cdev_init</code> needs:
+</p>
+<ol class="org-ol">
+<li>A pointer to the memory to initalize. We're using <code>cdev</code> on <code>device</code>.</li>
+<li>A pointer to the file operations. We're using <code>&amp;hello_fops</code> (the functions will be defined later).</li>
+</ol>
+
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgf4c1563"><span style="color: #E5C07B;">char</span> *<span style="color: #E06C75;">default_target</span> = <span style="color: #98C379;">"world"</span>;
+<span style="color: #61AFEF;">memcpy</span>(device-&gt;target, default_target, <span style="color: #E5C07B;">strlen</span>(<span style="color: #E06C75;">default_target</span>));
+</pre>
+</div>
+
+<p>
+We set up the default target of the greeting by copying it into the recently allocated space for <code>device</code> using <code>memcpy</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org68d9578"><span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">error</span>;
+error = cdev_add(&amp;device-&gt;cdev, dev, 1);
+<span style="color: #C678DD;">if</span> (error) {
+  printk(KERN_NOTICE <span style="color: #98C379;">"Error %d adding hello%d"</span>, error, dev);
+}
+</pre>
+</div>
+
+<p>
+Finally we can add the device using <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-cdev-add.html"><code>cdev_add</code></a>, logging a message if there is any problem.
+</p>
+
+<p>
+<code>cdev_add</code> needs:
+</p>
+<ol class="org-ol">
+<li>A pointer to the device to add. We're using the <code>cdev</code> which was recently initalized on <code>device</code>.</li>
+<li>The first device number this driver handles. <code>dev</code> is set to this early on during module loading.</li>
+<li>The number of minor numbers to add for this driver. We're only using a single device so 1 is fine.</li>
+</ol>
+
+
+<div class="org-src-container">
+<pre class="src src-c" id="orga7f0705"><span style="color: #61AFEF;">module_init</span>(hello_init);
+</pre>
+</div>
+
+<p>
+We wrap this loading functionality up in <code>static int hello_init(void)</code> and use <a href="https://www.kernel.org/doc/htmldocs/kernel-hacking/routines-init-again.html"><code>module_init</code></a> to tell the kernel how to load the module.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0a3f5b4" class="outline-4">
+<h4 id="org0a3f5b4"><span class="section-number-4">1.1.4</span> Unloading</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+Unloading this module is a bit simpler. We have to free the memory we allocated and unregister the driver.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgcca581a"><span style="color: #61AFEF;">kfree</span>(device);
+</pre>
+</div>
+
+<p>
+Memory is freed using <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-kfree.html"><code>kfree</code></a> which needs a pointer that was returned by <code>kmalloc</code>. We're using <code>device</code> which was allocated when the module was loaded.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org50fa463"><span style="color: #E5C07B;">dev_t</span> <span style="color: #E06C75;">dev_num</span> = MKDEV(hello_major, hello_minor);
+<span style="color: #61AFEF;">unregister_chrdev_region</span>(dev_num, 1);
+</pre>
+</div>
+
+<p>
+We use <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-unregister-chrdev-region.html"><code>unregister_chrdev_region</code></a> to release the device we allocated with <code>alloc_chrdev_region</code> when the module was loaded.
+</p>
+
+<p>
+<code>unregister_chrdev_region</code> needs:
+</p>
+<ol class="org-ol">
+<li>The first device number in the region. We're using <code>MKDEV</code> to build that based on <code>hello_major</code> and <code>hello_minor</code>.</li>
+<li>The number of devices. We allocated one when the module was loaded.</li>
+</ol>
+
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgc7cb08a"><span style="color: #61AFEF;">module_exit</span>(hello_exit);
+</pre>
+</div>
+
+<p>
+We wrap this up in <code>static void hello_exit(void)</code> and use <a href="https://www.kernel.org/doc/htmldocs/kernel-hacking/routines-moduleexit.html"><code>module_exit</code></a> to let the kernel know how to unload the module.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgafa4c0b" class="outline-3">
+<h3 id="orgafa4c0b"><span class="section-number-3">1.2</span> <span class="todo TODO">TODO</span> Opening and Closing a Device</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-orgb6068c8" class="outline-4">
+<h4 id="orgb6068c8"><span class="section-number-4">1.2.1</span> <span class="todo TODO">TODO</span> Opening</h4>
+</div>
+<div id="outline-container-org2121827" class="outline-4">
+<h4 id="org2121827"><span class="section-number-4">1.2.2</span> <span class="todo TODO">TODO</span> Closing</h4>
+</div>
+</div>
+<div id="outline-container-org6979966" class="outline-3">
+<h3 id="org6979966"><span class="section-number-3">1.3</span> <span class="todo TODO">TODO</span> Reading and Writing Devices</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-org38943a3" class="outline-4">
+<h4 id="org38943a3"><span class="section-number-4">1.3.1</span> <span class="todo TODO">TODO</span> Reading</h4>
+</div>
+<div id="outline-container-org5b198bc" class="outline-4">
+<h4 id="org5b198bc"><span class="section-number-4">1.3.2</span> <span class="todo TODO">TODO</span> Writing</h4>
+</div>
+</div>
+<div id="outline-container-org40851cc" class="outline-3">
+<h3 id="org40851cc"><span class="section-number-3">1.4</span> <span class="todo TODO">TODO</span> Building the Module</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-org48c9c25" class="outline-4">
+<h4 id="org48c9c25"><span class="section-number-4">1.4.1</span> <span class="todo TODO">TODO</span> <code>Makefile</code></h4>
+</div>
+</div>
+<div id="outline-container-org4e5f50f" class="outline-3">
+<h3 id="org4e5f50f"><span class="section-number-3">1.5</span> <span class="todo TODO">TODO</span> Using It!</h3>
+<div class="outline-text-3" id="text-1-5">
+</div>
+<div id="outline-container-orga1f72db" class="outline-4">
+<h4 id="orga1f72db"><span class="section-number-4">1.5.1</span> <span class="todo TODO">TODO</span> <code>hello-dev-load.sh</code></h4>
+</div>
+<div id="outline-container-org5d1fc90" class="outline-4">
+<h4 id="org5d1fc90"><span class="section-number-4">1.5.2</span> <span class="todo TODO">TODO</span> <code>hello-dev-unload.sh</code></h4>
+</div>
+<div id="outline-container-org52ae1c7" class="outline-4">
+<h4 id="org52ae1c7"><span class="section-number-4">1.5.3</span> <span class="todo TODO">TODO</span> Interacting with the Device File</h4>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Frank Burnham</p>
+<p class="date">Created: 2022-07-10 Sun 12:21</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
