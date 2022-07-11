@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-10 Sun 12:21 -->
+<!-- 2022-07-11 Mon 08:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -246,38 +246,38 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2d67913">1. Hello <code>chrdev</code></a>
+<li><a href="#org72e1b85">1. Hello <code>chrdev</code></a>
 <ul>
-<li><a href="#orgd06b7b4">1.1. Loading and Unloading the Module</a>
+<li><a href="#orgff5707c">1.1. Loading and Unloading the Module</a>
 <ul>
-<li><a href="#org5d155c3">1.1.1. Structs and Macros</a></li>
-<li><a href="#orgf951c6c">1.1.2. Major Number Parameter</a></li>
-<li><a href="#orgebe3a66">1.1.3. Loading</a></li>
-<li><a href="#org0a3f5b4">1.1.4. Unloading</a></li>
+<li><a href="#orgf017051">1.1.1. Structs and Macros</a></li>
+<li><a href="#orgabe7f47">1.1.2. Major Number Parameter</a></li>
+<li><a href="#org801bfd5">1.1.3. Loading</a></li>
+<li><a href="#org907b85d">1.1.4. Unloading</a></li>
 </ul>
 </li>
-<li><a href="#orgafa4c0b">1.2. <span class="todo TODO">TODO</span> Opening and Closing a Device</a>
+<li><a href="#org0967ab0">1.2. Opening and Closing a Device</a>
 <ul>
-<li><a href="#orgb6068c8">1.2.1. <span class="todo TODO">TODO</span> Opening</a></li>
-<li><a href="#org2121827">1.2.2. <span class="todo TODO">TODO</span> Closing</a></li>
+<li><a href="#org4ffaed9">1.2.1. Opening</a></li>
+<li><a href="#orgd929f89">1.2.2. Closing</a></li>
 </ul>
 </li>
-<li><a href="#org6979966">1.3. <span class="todo TODO">TODO</span> Reading and Writing Devices</a>
+<li><a href="#orgc51929f">1.3. Reading and Writing Devices</a>
 <ul>
-<li><a href="#org38943a3">1.3.1. <span class="todo TODO">TODO</span> Reading</a></li>
-<li><a href="#org5b198bc">1.3.2. <span class="todo TODO">TODO</span> Writing</a></li>
+<li><a href="#org81366d3">1.3.1. Reading</a></li>
+<li><a href="#org970cc72">1.3.2. Writing</a></li>
 </ul>
 </li>
-<li><a href="#org40851cc">1.4. <span class="todo TODO">TODO</span> Building the Module</a>
+<li><a href="#orgdadf6be">1.4. <span class="todo TODO">TODO</span> Building the Module</a>
 <ul>
-<li><a href="#org48c9c25">1.4.1. <span class="todo TODO">TODO</span> <code>Makefile</code></a></li>
+<li><a href="#org83fbfda">1.4.1. <span class="todo TODO">TODO</span> <code>Makefile</code></a></li>
 </ul>
 </li>
-<li><a href="#org4e5f50f">1.5. <span class="todo TODO">TODO</span> Using It!</a>
+<li><a href="#org81f40e2">1.5. <span class="todo TODO">TODO</span> Using It!</a>
 <ul>
-<li><a href="#orga1f72db">1.5.1. <span class="todo TODO">TODO</span> <code>hello-dev-load.sh</code></a></li>
-<li><a href="#org5d1fc90">1.5.2. <span class="todo TODO">TODO</span> <code>hello-dev-unload.sh</code></a></li>
-<li><a href="#org52ae1c7">1.5.3. <span class="todo TODO">TODO</span> Interacting with the Device File</a></li>
+<li><a href="#orgf784eb6">1.5.1. <span class="todo TODO">TODO</span> <code>hello-dev-load.sh</code></a></li>
+<li><a href="#orge7b4fcb">1.5.2. <span class="todo TODO">TODO</span> <code>hello-dev-unload.sh</code></a></li>
+<li><a href="#org9163c53">1.5.3. <span class="todo TODO">TODO</span> Interacting with the Device File</a></li>
 </ul>
 </li>
 </ul>
@@ -285,11 +285,11 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-org2d67913" class="outline-2">
-<h2 id="org2d67913"><span class="section-number-2">1</span> Hello <code>chrdev</code></h2>
+<div id="outline-container-org72e1b85" class="outline-2">
+<h2 id="org72e1b85"><span class="section-number-2">1</span> Hello <code>chrdev</code></h2>
 <div class="outline-text-2" id="text-1">
 <p>
-A learning module created by simplifying the scull module presented in chapter 3 of <i>Linux Device Drivers 3rd ed</i>.
+A learning module created by simplifying the scull module presented in <a href="https://lwn.net/images/pdf/LDD3/ch03.pdf">chapter 3</a> of <a href="https://lwn.net/Kernel/LDD3/"><i>Linux Device Drivers, Third Edition</i></a>.
 </p>
 
 <p>
@@ -298,19 +298,19 @@ After which <code>cat /dev/hello-dev0</code> will output "Hello Bob".
 </p>
 </div>
 
-<div id="outline-container-orgd06b7b4" class="outline-3">
-<h3 id="orgd06b7b4"><span class="section-number-3">1.1</span> Loading and Unloading the Module</h3>
+<div id="outline-container-orgff5707c" class="outline-3">
+<h3 id="orgff5707c"><span class="section-number-3">1.1</span> Loading and Unloading the Module</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-org5d155c3" class="outline-4">
-<h4 id="org5d155c3"><span class="section-number-4">1.1.1</span> Structs and Macros</h4>
+<div id="outline-container-orgf017051" class="outline-4">
+<h4 id="orgf017051"><span class="section-number-4">1.1.1</span> Structs and Macros</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 We need to set up some things so that our "Hello" greeting can have a <code>target</code> other than "world".
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgae9adf2"><span style="color: #828997;">#if</span><span style="color: #828997; font-weight: bold;">n</span><span style="color: #828997;">def</span> TARGET_MAX_LEN
+<pre class="src src-c" id="orge6f7413"><span style="color: #828997;">#if</span><span style="color: #828997; font-weight: bold;">n</span><span style="color: #828997;">def</span> TARGET_MAX_LEN
 <span style="color: #828997;">#define</span> <span style="color: #E06C75;">TARGET_MAX_LEN</span> 64
 <span style="color: #828997;">#endif</span>
 </pre>
@@ -322,7 +322,7 @@ at load time is an example of a module parameter, a compile time parameter is si
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org388e7da"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span> {
+<pre class="src src-c" id="orge40eb5e"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span> {
   <span style="color: #E5C07B;">char</span> <span style="color: #E06C75;">target</span>[TARGET_MAX_LEN + 1];
   <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cdev</span> <span style="color: #E06C75;">cdev</span>;
 };
@@ -336,8 +336,8 @@ like <code>/dev/hello-dev0</code> and <code>/dev/hello-dev1</code>, that each ha
 </div>
 </div>
 
-<div id="outline-container-orgf951c6c" class="outline-4">
-<h4 id="orgf951c6c"><span class="section-number-4">1.1.2</span> Major Number Parameter</h4>
+<div id="outline-container-orgabe7f47" class="outline-4">
+<h4 id="orgabe7f47"><span class="section-number-4">1.1.2</span> Major Number Parameter</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Each device has a major and minor number. The major is used by the kernel to determine which driver manages a devices. The minor is used to distinguish devices that
@@ -372,7 +372,7 @@ account for it the same way the <code>scull_load</code> does in <code>hello-dev-
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgac4714d"><span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">hello_major</span> = 0;
+<pre class="src src-c" id="org8fecc10"><span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">hello_major</span> = 0;
 <span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">hello_minor</span> = 0;
 </pre>
 </div>
@@ -383,15 +383,15 @@ We'll use these globals to store the major and minor numbers.
 </div>
 </div>
 
-<div id="outline-container-orgebe3a66" class="outline-4">
-<h4 id="orgebe3a66"><span class="section-number-4">1.1.3</span> Loading</h4>
+<div id="outline-container-org801bfd5" class="outline-4">
+<h4 id="org801bfd5"><span class="section-number-4">1.1.3</span> Loading</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <p>
 To be useful our driver needs to get a major number and initialize the state for the devices when it is loaded.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org88bdb08"><span style="color: #E5C07B;">dev_t</span> <span style="color: #E06C75;">dev</span>;
+<pre class="src src-c" id="org41b9466"><span style="color: #E5C07B;">dev_t</span> <span style="color: #E06C75;">dev</span>;
 <span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">result</span> = 0;
 
 result = alloc_chrdev_region(&amp;dev, hello_minor, 1, <span style="color: #98C379;">"hello-dev"</span>);
@@ -428,7 +428,7 @@ Now that we've got a major number we can prepare the device!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org187319f"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span> *<span style="color: #E06C75;">device</span>;
+<pre class="src src-c" id="org4d0dd31"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span> *<span style="color: #E06C75;">device</span>;
 </pre>
 </div>
 
@@ -438,7 +438,7 @@ Now that we've got a major number we can prepare the device!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org49cda3c">device = kmalloc(<span style="color: #C678DD;">sizeof</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span>), GFP_KERNEL);
+<pre class="src src-c" id="org9a03ddf">device = kmalloc(<span style="color: #C678DD;">sizeof</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">hello_dev</span>), GFP_KERNEL);
 <span style="color: #C678DD;">if</span> (<span style="color: #56B6C2; font-weight: bold;">!</span>device) {
   result = -ENOMEM;
  }
@@ -461,7 +461,7 @@ We also make sure to zero the memory out using <code>memset</code> because kerne
 
 
 <div class="org-src-container">
-<pre class="src src-c" id="org1fde12e"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">file_operations</span> <span style="color: #E06C75;">hello_fops</span> = {
+<pre class="src src-c" id="orgf5eccae"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">file_operations</span> <span style="color: #E06C75;">hello_fops</span> = {
   .owner = THIS_MODULE,
   .read = hello_read,
   .write = hello_write,
@@ -476,7 +476,7 @@ We'll implement these functions later so that our driver can provide read and wr
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org9aa444b">cdev_init(&amp;device-&gt;cdev, &amp;hello_fops);
+<pre class="src src-c" id="org626f96a">cdev_init(&amp;device-&gt;cdev, &amp;hello_fops);
 device-&gt;cdev.owner = THIS_MODULE;
 device-&gt;cdev.ops = &amp;hello_fops;
 </pre>
@@ -498,8 +498,12 @@ to the running module.
 
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgf4c1563"><span style="color: #E5C07B;">char</span> *<span style="color: #E06C75;">default_target</span> = <span style="color: #98C379;">"world"</span>;
-<span style="color: #61AFEF;">memcpy</span>(device-&gt;target, default_target, <span style="color: #E5C07B;">strlen</span>(<span style="color: #E06C75;">default_target</span>));
+<pre class="src src-c" id="org3dd267e"><span style="color: #E5C07B;">char</span> *<span style="color: #E06C75;">default_target</span> = <span style="color: #98C379;">"world"</span>;
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgff2f0ae"><span style="color: #61AFEF;">memcpy</span>(device-&gt;target, default_target, <span style="color: #E5C07B;">strlen</span>(<span style="color: #E06C75;">default_target</span>));
 </pre>
 </div>
 
@@ -508,8 +512,12 @@ We set up the default target of the greeting by copying it into the recently all
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org68d9578"><span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">error</span>;
-error = cdev_add(&amp;device-&gt;cdev, dev, 1);
+<pre class="src src-c" id="orgc626229"><span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">error</span>;
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org64c5a90">error = cdev_add(&amp;device-&gt;cdev, dev, 1);
 <span style="color: #C678DD;">if</span> (error) {
   printk(KERN_NOTICE <span style="color: #98C379;">"Error %d adding hello%d"</span>, error, dev);
 }
@@ -531,7 +539,7 @@ Finally we can add the device using <a href="https://www.kernel.org/doc/htmldocs
 
 
 <div class="org-src-container">
-<pre class="src src-c" id="orga7f0705"><span style="color: #61AFEF;">module_init</span>(hello_init);
+<pre class="src src-c" id="org587ae21"><span style="color: #61AFEF;">module_init</span>(hello_init);
 </pre>
 </div>
 
@@ -541,15 +549,15 @@ We wrap this loading functionality up in <code>static int hello_init(void)</code
 </div>
 </div>
 
-<div id="outline-container-org0a3f5b4" class="outline-4">
-<h4 id="org0a3f5b4"><span class="section-number-4">1.1.4</span> Unloading</h4>
+<div id="outline-container-org907b85d" class="outline-4">
+<h4 id="org907b85d"><span class="section-number-4">1.1.4</span> Unloading</h4>
 <div class="outline-text-4" id="text-1-1-4">
 <p>
 Unloading this module is a bit simpler. We have to free the memory we allocated and unregister the driver.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgcca581a"><span style="color: #61AFEF;">kfree</span>(device);
+<pre class="src src-c" id="orgadb75f5"><span style="color: #61AFEF;">kfree</span>(device);
 </pre>
 </div>
 
@@ -558,8 +566,12 @@ Memory is freed using <a href="https://www.kernel.org/doc/htmldocs/kernel-api/AP
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org50fa463"><span style="color: #E5C07B;">dev_t</span> <span style="color: #E06C75;">dev_num</span> = MKDEV(hello_major, hello_minor);
-<span style="color: #61AFEF;">unregister_chrdev_region</span>(dev_num, 1);
+<pre class="src src-c" id="orgf4f7b1f"><span style="color: #E5C07B;">dev_t</span> <span style="color: #E06C75;">dev_num</span> = MKDEV(hello_major, hello_minor);
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org69024c3"><span style="color: #61AFEF;">unregister_chrdev_region</span>(dev_num, 1);
 </pre>
 </div>
 
@@ -577,7 +589,7 @@ We use <a href="https://www.kernel.org/doc/htmldocs/kernel-api/API-unregister-ch
 
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgc7cb08a"><span style="color: #61AFEF;">module_exit</span>(hello_exit);
+<pre class="src src-c" id="org5a8cf0a"><span style="color: #61AFEF;">module_exit</span>(hello_exit);
 </pre>
 </div>
 
@@ -588,55 +600,267 @@ We wrap this up in <code>static void hello_exit(void)</code> and use <a href="ht
 </div>
 </div>
 
-<div id="outline-container-orgafa4c0b" class="outline-3">
-<h3 id="orgafa4c0b"><span class="section-number-3">1.2</span> <span class="todo TODO">TODO</span> Opening and Closing a Device</h3>
+<div id="outline-container-org0967ab0" class="outline-3">
+<h3 id="org0967ab0"><span class="section-number-3">1.2</span> Opening and Closing a Device</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-orgb6068c8" class="outline-4">
-<h4 id="orgb6068c8"><span class="section-number-4">1.2.1</span> <span class="todo TODO">TODO</span> Opening</h4>
+<div id="outline-container-org4ffaed9" class="outline-4">
+<h4 id="org4ffaed9"><span class="section-number-4">1.2.1</span> Opening</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+A more sophisticated driver might have multiple devices and need to know which one is being opened. The open function is passed a <code>struct inode *</code> which contians a pointer
+to <code>cdev</code> on <code>device</code>. If we managed more than one device we'd use <a href="https://www.kernel.org/doc/html/latest/driver-api/driver-model/design-patterns.html#container-of"><code>container_of</code></a> to determine <i>which</i> device in our array of <code>struct hello_dev</code> was being opened. Once we 
+have a pointer to a <code>struct hello_dev</code> it can be placed in <code>struct file</code>'s <code>private_data</code> so that read and write functions have access to the device state.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org4affb47"><span style="color: #C678DD;">if</span> ((f-&gt;f_flags &amp; O_ACCMODE) == O_WRONLY) {
+  memset(device-&gt;target, 0, TARGET_MAX_LEN + 1);
+}
+</pre>
 </div>
-<div id="outline-container-org2121827" class="outline-4">
-<h4 id="org2121827"><span class="section-number-4">1.2.2</span> <span class="todo TODO">TODO</span> Closing</h4>
+
+<p>
+This module doesn't have much setup to do on open. If the device file was opened write only then we zero out the <code>target</code> in anticipation of new data. We wrap it up in a
+<code>int hello_open (struct inode *i, struct file *f)</code> so it matches what <code>struct file_operations</code> expects.
+</p>
 </div>
 </div>
-<div id="outline-container-org6979966" class="outline-3">
-<h3 id="org6979966"><span class="section-number-3">1.3</span> <span class="todo TODO">TODO</span> Reading and Writing Devices</h3>
+
+<div id="outline-container-orgd929f89" class="outline-4">
+<h4 id="orgd929f89"><span class="section-number-4">1.2.2</span> Closing</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+Easy setup makes for easy cleanup. There would be more to consider on the release side if the driver was more sophisticated.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org96e92eb"><span style="color: #E5C07B;">int</span> <span style="color: #61AFEF;">hello_release</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">inode</span> *<span style="color: #E06C75;">i</span>, <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">file</span> *<span style="color: #E06C75;">f</span>) {
+  <span style="color: #C678DD;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+The function signature must match what is expected by <code>struct file_operations</code> like it does for <code>hello_open</code>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc51929f" class="outline-3">
+<h3 id="orgc51929f"><span class="section-number-3">1.3</span> Reading and Writing Devices</h3>
 <div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-org38943a3" class="outline-4">
-<h4 id="org38943a3"><span class="section-number-4">1.3.1</span> <span class="todo TODO">TODO</span> Reading</h4>
+<div id="outline-container-org81366d3" class="outline-4">
+<h4 id="org81366d3"><span class="section-number-4">1.3.1</span> Reading</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+Our goal when reading from the device is to output a greeting like "Hello world" or an updated greeting if someone has written a new <code>target</code> to the device.
+</p>
+
+<p>
+Our read function will be called by the kernel when someone tries to read from our device file. The kernel will pass us a <code>struct file *</code> so we can determine which
+device is being read from. If the driver were more sophisticated we would have made the <code>private_data</code> field of the <code>file</code> struct a pointer to our <code>device</code>. That way we'd
+be able to access any state we had stored for the device. Since this driver only manages one device we can skip that detail.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org7ab9c2e"><span style="color: #E5C07B;">char</span> <span style="color: #E06C75;">data</span>[72] = <span style="color: #98C379;">"Hello "</span>;
+</pre>
 </div>
-<div id="outline-container-org5b198bc" class="outline-4">
-<h4 id="org5b198bc"><span class="section-number-4">1.3.2</span> <span class="todo TODO">TODO</span> Writing</h4>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org07d3197"><span style="color: #61AFEF;">memcpy</span>(data + strlen(data), device-&gt;target, strlen(device-&gt;target));
+</pre>
+</div>
+
+<p>
+We build up our greeting string so that it can be copied into user memory later.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgef02bc5"><span style="color: #E5C07B;">long</span> <span style="color: #E06C75;">leftover</span>, <span style="color: #E06C75;">transferred</span>, <span style="color: #E06C75;">remaining_bytes</span>;
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orga257dc1">remaining_bytes = strlen(data) - *offset;
+<span style="color: #C678DD;">if</span> (remaining_bytes &lt;= 0) {
+  transferred = 0;
+} <span style="color: #C678DD;">else</span> <span style="color: #C678DD;">if</span> (read_amount &gt; remaining_bytes) {
+  leftover = copy_to_user(buf, data + *offset, remaining_bytes);
+  transferred = remaining_bytes - leftover;
+} <span style="color: #C678DD;">else</span> {
+  leftover = copy_to_user(buf, data + *offset, read_amount);
+  transferred = read_amount - leftover;
+}
+</pre>
+</div>
+
+<p>
+When our read function is called it'll get the amount of data the caller is prepared to read as a <code>size_t</code> and an <code>loff_t *</code> that specifies the offset before the read. We'll
+update that offset after data is copied to user memory. 
+</p>
+
+<p>
+Before we go copying from kernel memory to user memory we need to check a couple things:
+</p>
+<ol class="org-ol">
+<li>Are there bytes left to read?
+<ol class="org-ol">
+<li>If not don't transfer anything to user memory</li>
+</ol></li>
+<li>Is the amount of data requested greater than the amount of data we have to read? 
+<ol class="org-ol">
+<li>If so attempt to transfer all the remaining data</li>
+</ol></li>
+<li>Otherwise the offset must be before the end of readable data and the amount of data requested must be less than the amount that can be read
+<ol class="org-ol">
+<li>Attempt to transfer all the requested bytes from kernel memory to user memory</li>
+</ol></li>
+</ol>
+
+<p>
+We can't directly copy from kernel memory to user memory. Instead we need to use <a href="https://www.kernel.org/doc/html/v4.16/kernel-hacking/hacking.html#copy-to-user-copy-from-user-get-user-put-user"><code>copy_to_user</code></a> to move data around.
+</p>
+
+<p>
+<code>copy_to_user</code> needs:
+</p>
+<ol class="org-ol">
+<li>A destination pointer in user memory</li>
+<li>A source pointer in kernel memory</li>
+<li>How many bytes to copy</li>
+</ol>
+
+
+<div class="org-src-container">
+<pre class="src src-c" id="org91d49c7">*offset = *offset + transferred;
+
+<span style="color: #C678DD;">return</span> transferred;
+</pre>
+</div>
+
+<p>
+Advance the offset based on how much data was successfully transferred. The function is also expected to return how much data was successfully moved.
+</p>
+
+<p>
+Wrap the read logic up in <code>ssize_t hello_read(struct file *f, char __user *buf, size_t read_amount, loff_t *offset)</code> so that it can be used in a <code>file_operations</code> struct.
+The <code>__user</code> on <code>char __user *buf</code> lets us know that the pointer is in user memory, not kernel memory.
+</p>
 </div>
 </div>
-<div id="outline-container-org40851cc" class="outline-3">
-<h3 id="org40851cc"><span class="section-number-3">1.4</span> <span class="todo TODO">TODO</span> Building the Module</h3>
+
+<div id="outline-container-org970cc72" class="outline-4">
+<h4 id="org970cc72"><span class="section-number-4">1.3.2</span> Writing</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+The goal of writing to the device is to update the <code>target</code> of the greeting. This is where <code>echo "Bob" &gt; /dev/hello-dev0</code> is able to update the device's state.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org05ff628"><span style="color: #E5C07B;">long</span> <span style="color: #E06C75;">leftover</span>, <span style="color: #E06C75;">transferred</span>, <span style="color: #E06C75;">remaining_bytes</span>;
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org33b6fe6">remaining_bytes = TARGET_MAX_LEN - *offset;
+<span style="color: #C678DD;">if</span> (remaining_bytes &lt;= 0) {
+  transferred = 0;
+} <span style="color: #C678DD;">else</span> <span style="color: #C678DD;">if</span> (write_amount &gt; remaining_bytes) {
+  leftover = copy_from_user(device-&gt;target + *offset, buf, remaining_bytes);
+  transferred = write_amount - leftover;
+} <span style="color: #C678DD;">else</span> {
+  leftover = copy_from_user(device-&gt;target + *offset, buf, write_amount);
+  transferred = write_amount - leftover;
+}
+</pre>
+</div>
+
+<p>
+Similar to the read function we'll get <code>write_amount</code>, which represents the desired number of bytes to write, and a pointer to an <code>offset</code>, which represents how
+many bytes into the data to start the write. We have to make sure to prevent writes that would be out of bounds either because the <code>offset</code> is past the end of our
+data's allocated memory or because the <code>write_amount</code> is greater than the space we have for writing.
+</p>
+
+<p>
+To determine how much space can still be written we subtract the desired offset from the number of bytes we have allocated.
+</p>
+
+<p>
+Our checks look like:
+</p>
+<ol class="org-ol">
+<li>Is there any space left for writing?
+<ol class="org-ol">
+<li>If not don't transfer anything</li>
+</ol></li>
+<li>Is the amount of data to be written bigger than the space we have for writing?
+<ol class="org-ol">
+<li>If so attempt to transfer as much as we can from user memory to kernel memory and ignore the rest
+<ol class="org-ol">
+<li>We'll lie a little bit here and tell the caller that all the requested data was written, minus anything <code>copy_from_user</code> missed, so that the caller won't
+keep trying to write data that won't fit.</li>
+</ol></li>
+</ol></li>
+<li>Otherwise we must have room to write to and the offset is in bounds
+<ol class="org-ol">
+<li>Attempt to transfer all the data from user memory to kernel memory</li>
+</ol></li>
+</ol>
+
+
+<p>
+<code>copy_from_user</code> is similar to <code>copy_to_user</code> and we use it for the same reason. We can't directly copy from user memory to kernel memory for a variety of reasons.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org9f55efa">*offset = *offset + transferred;
+<span style="color: #C678DD;">return</span> transferred;
+</pre>
+</div>
+
+<p>
+Just like read has to advance the offset after reading we have to advance the offset after writing. We're also expected to return the number of bytes written.
+</p>
+
+<p>
+We wrap up the write logic in <code>ssize_t hello_write(struct file *f, const char __user *buf, size_t write_amount, loff_t *offset)</code> so it works for a 
+<code>file_operations</code> struct.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdadf6be" class="outline-3">
+<h3 id="orgdadf6be"><span class="section-number-3">1.4</span> <span class="todo TODO">TODO</span> Building the Module</h3>
 <div class="outline-text-3" id="text-1-4">
 </div>
-<div id="outline-container-org48c9c25" class="outline-4">
-<h4 id="org48c9c25"><span class="section-number-4">1.4.1</span> <span class="todo TODO">TODO</span> <code>Makefile</code></h4>
+<div id="outline-container-org83fbfda" class="outline-4">
+<h4 id="org83fbfda"><span class="section-number-4">1.4.1</span> <span class="todo TODO">TODO</span> <code>Makefile</code></h4>
 </div>
 </div>
-<div id="outline-container-org4e5f50f" class="outline-3">
-<h3 id="org4e5f50f"><span class="section-number-3">1.5</span> <span class="todo TODO">TODO</span> Using It!</h3>
+<div id="outline-container-org81f40e2" class="outline-3">
+<h3 id="org81f40e2"><span class="section-number-3">1.5</span> <span class="todo TODO">TODO</span> Using It!</h3>
 <div class="outline-text-3" id="text-1-5">
 </div>
-<div id="outline-container-orga1f72db" class="outline-4">
-<h4 id="orga1f72db"><span class="section-number-4">1.5.1</span> <span class="todo TODO">TODO</span> <code>hello-dev-load.sh</code></h4>
+<div id="outline-container-orgf784eb6" class="outline-4">
+<h4 id="orgf784eb6"><span class="section-number-4">1.5.1</span> <span class="todo TODO">TODO</span> <code>hello-dev-load.sh</code></h4>
 </div>
-<div id="outline-container-org5d1fc90" class="outline-4">
-<h4 id="org5d1fc90"><span class="section-number-4">1.5.2</span> <span class="todo TODO">TODO</span> <code>hello-dev-unload.sh</code></h4>
+<div id="outline-container-orge7b4fcb" class="outline-4">
+<h4 id="orge7b4fcb"><span class="section-number-4">1.5.2</span> <span class="todo TODO">TODO</span> <code>hello-dev-unload.sh</code></h4>
 </div>
-<div id="outline-container-org52ae1c7" class="outline-4">
-<h4 id="org52ae1c7"><span class="section-number-4">1.5.3</span> <span class="todo TODO">TODO</span> Interacting with the Device File</h4>
+<div id="outline-container-org9163c53" class="outline-4">
+<h4 id="org9163c53"><span class="section-number-4">1.5.3</span> <span class="todo TODO">TODO</span> Interacting with the Device File</h4>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Frank Burnham</p>
-<p class="date">Created: 2022-07-10 Sun 12:21</p>
+<p class="date">Created: 2022-07-11 Mon 08:09</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
