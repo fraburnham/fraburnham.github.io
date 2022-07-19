@@ -11,3 +11,7 @@ body {
 #content {
     width: 70%;
 }
+
+code {
+    background-color: #f0f0f0;
+}
