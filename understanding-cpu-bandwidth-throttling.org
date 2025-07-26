@@ -1,0 +1,348 @@
+#+TITLE: Understanding CPU Bandwidth Throttling with the Completely Fair Scheduler and Control Groups
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org-style.css" />
+#+OPTIONS: toc:nil
+
+NOTE: This is for the linux kernel version 6.1.
+
+NOTE: I have no idea what I'm talking about.
+
+TODO Overview of how each section joins to make throttling work (use a mermaid diagram! https://github.com/arnm/ob-mermaid)
+
+#+TOC: headlines 1 local
+
+** How Consumed CPU Bandwidth is Calculated and Tracked for ~cgroups~
+
+~update_curr~ is called, at least, when a ~sched_entity~ is enqueued or dequeued (by ~enqueue_entity~ and ~dequeue_entity~ respectively). It calls ~cgroup_account_cputime~ which handles
+propagating the consumed bandwitdth to all entities in the ~cgroup~.
+
+From ~include/linux/sched.h~ TODO: omit fields from struct defs that aren't used in the interesting code paths
+
+#+name: task_group
+#+begin_src c
+  struct task_group {
+    // stuff omitted
+
+  #ifdef CONFIG_FAIR_GROUP_SCHED
+  	/* schedulable entities of this group on each CPU */
+  	struct sched_entity	**se;
+  	/* runqueue "owned" by this group on each CPU */
+  	struct cfs_rq		**cfs_rq;
+  	unsigned long		shares;
+
+  	/* A positive value indicates that this is a SCHED_IDLE group. */
+  	int			idle;
+
+  #ifdef	CONFIG_SMP
+  	/*
+  	 ,* load_avg can be heavily contended at clock tick time, so put
+  	 ,* it in its own cacheline separated from the fields above which
+  	 ,* will also be accessed at each tick.
+  	 ,*/
+  	atomic_long_t		load_avg ____cacheline_aligned;
+  #endif
+  #endif
+    
+    // stuff omitted
+
+          struct task_group	*parent;
+  	struct list_head	siblings;
+  	struct list_head	children;
+
+    // stuff omitted
+
+          struct cfs_bandwidth	cfs_bandwidth;
+
+    // stuff omitted
+  };
+
+  // stuff omitted
+
+  /* CFS-related fields in a runqueue */
+  struct cfs_rq {
+  	struct load_weight	load;
+  	unsigned int		nr_running;
+  	unsigned int		h_nr_running;      /* SCHED_{NORMAL,BATCH,IDLE} */
+  	unsigned int		idle_nr_running;   /* SCHED_IDLE */
+  	unsigned int		idle_h_nr_running; /* SCHED_IDLE */
+
+  	u64			exec_clock;
+  	u64			min_vruntime;
+  #ifdef CONFIG_SCHED_CORE
+  	unsigned int		forceidle_seq;
+  	u64			min_vruntime_fi;
+  #endif
+
+  #ifndef CONFIG_64BIT
+  	u64			min_vruntime_copy;
+  #endif
+
+  	struct rb_root_cached	tasks_timeline;
+
+  	/*
+  	 ,* 'curr' points to currently running entity on this cfs_rq.
+  	 ,* It is set to NULL otherwise (i.e when none are currently running).
+  	 ,*/
+  	struct sched_entity	*curr;
+  	struct sched_entity	*next;
+  	struct sched_entity	*last;
+  	struct sched_entity	*skip;
+
+    // stuff omitted
+
+  #ifdef CONFIG_SMP
+  	/*
+  	 ,* CFS load tracking
+  	 ,*/
+  	struct sched_avg	avg;
+  #ifndef CONFIG_64BIT
+  	u64			last_update_time_copy;
+  #endif
+  	struct {
+  		raw_spinlock_t	lock ____cacheline_aligned;
+  		int		nr;
+  		unsigned long	load_avg;
+  		unsigned long	util_avg;
+  		unsigned long	runnable_avg;
+  	} removed;
+
+  #ifdef CONFIG_FAIR_GROUP_SCHED
+  	unsigned long		tg_load_avg_contrib;
+  	long			propagate;
+  	long			prop_runnable_sum;
+
+  	/*
+  	 ,*   h_load = weight * f(tg)
+  	 ,*
+  	 ,* Where f(tg) is the recursive weight fraction assigned to
+  	 ,* this group.
+  	 ,*/
+  	unsigned long		h_load;
+  	u64			last_h_load_update;
+  	struct sched_entity	*h_load_next;
+  #endif /* CONFIG_FAIR_GROUP_SCHED */
+  #endif /* CONFIG_SMP */
+
+  #ifdef CONFIG_FAIR_GROUP_SCHED
+  	struct rq		*rq;	/* CPU runqueue to which this cfs_rq is attached */
+
+  	/*
+  	 ,* leaf cfs_rqs are those that hold tasks (lowest schedulable entity in
+  	 ,* a hierarchy). Non-leaf lrqs hold other higher schedulable entities
+  	 ,* (like users, containers etc.)
+  	 ,*
+  	 ,* leaf_cfs_rq_list ties together list of leaf cfs_rq's in a CPU.
+  	 ,* This list is used during load balance.
+  	 ,*/
+  	int			on_list;
+  	struct list_head	leaf_cfs_rq_list;
+  	struct task_group	*tg;	/* group that "owns" this runqueue */
+
+  	/* Locally cached copy of our task_group's idle value */
+  	int			idle;
+
+  #ifdef CONFIG_CFS_BANDWIDTH
+  	int			runtime_enabled;
+  	s64			runtime_remaining;
+
+  	u64			throttled_pelt_idle;
+  #ifndef CONFIG_64BIT
+  	u64                     throttled_pelt_idle_copy;
+  #endif
+  	u64			throttled_clock;
+  	u64			throttled_clock_pelt;
+  	u64			throttled_clock_pelt_time;
+  	int			throttled;
+  	int			throttle_count;
+  	struct list_head	throttled_list;
+  #endif /* CONFIG_CFS_BANDWIDTH */
+  #endif /* CONFIG_FAIR_GROUP_SCHED */
+  };
+#+end_src
+
+The ~task_group~ knows about the ~sched_entities~ and ~cfs_rqs~ that the group uses (one per cpu that the group uses). It also keeps track of the ~cfs_bandwidth~ which is used when
+determining if a ~cgroup~ should be throttled. Each ~cfs_rq~ is also keeps track of bandwidth consumed.
+
+From ~kernel/sched/fair.c~ (cfs scheduler)
+
+#+name: update_curr
+#+begin_src c
+  /*
+   * Update the current task's runtime statistics.
+   */
+  static void update_curr(struct cfs_rq *cfs_rq)
+  {
+  	struct sched_entity *curr = cfs_rq->curr;
+  	u64 now = rq_clock_task(rq_of(cfs_rq));
+  	u64 delta_exec;
+
+  	if (unlikely(!curr))
+  		return;
+
+  	delta_exec = now - curr->exec_start;
+  	if (unlikely((s64)delta_exec <= 0))
+  		return;
+
+  	curr->exec_start = now;
+
+  	if (schedstat_enabled()) {
+  		struct sched_statistics *stats;
+
+  		stats = __schedstats_from_se(curr);
+  		__schedstat_set(stats->exec_max,
+  				max(delta_exec, stats->exec_max));
+  	}
+
+  	curr->sum_exec_runtime += delta_exec;
+  	schedstat_add(cfs_rq->exec_clock, delta_exec);
+
+  	curr->vruntime += calc_delta_fair(delta_exec, curr);
+  	update_min_vruntime(cfs_rq);
+
+  	if (entity_is_task(curr)) {
+  		struct task_struct *curtask = task_of(curr);
+
+  		trace_sched_stat_runtime(curtask, delta_exec, curr->vruntime);
+  		cgroup_account_cputime(curtask, delta_exec);
+  		account_group_exec_runtime(curtask, delta_exec);
+  	}
+
+  	account_cfs_rq_runtime(cfs_rq, delta_exec);
+  }
+#+end_src
+
+~update_curr~ is called for a variety of reasons like a task being enqueued or dequeued. It updates the ~sched_entity~ (the smallest scheduleable unit) that is currently running (or
+task if the current entity is a task) in this ~cfs_rq~. It calls ~cgroup_account_cputime~ to handle tracking bandwidth usage for a ~cgroup~.
+
+From ~include/linux/cgroup.h~
+
+#+name: cgroup_acccount_cputime
+#+begin_src c
+  static inline void cgroup_account_cputime(struct task_struct *task,
+  					  u64 delta_exec)
+  {
+  	struct cgroup *cgrp;
+
+  	cpuacct_charge(task, delta_exec);
+
+  	cgrp = task_dfl_cgroup(task);
+  	if (cgroup_parent(cgrp))
+  		__cgroup_account_cputime(cgrp, delta_exec);
+  }
+#+end_src
+
+Given a task struct and a change in execution time, ~cgroup_account_cputime~ charges the task for the consumed bandwidth. If the task is a member of a group and it is not the parent,
+handle group accounting.
+
+From ~kernel/sched/cpuacct.c~
+
+#+name: cpuacct_charge
+#+begin_src c
+  /* track CPU usage of a group of tasks and its child groups */
+  struct cpuacct {
+  	struct cgroup_subsys_state	css;
+  	/* cpuusage holds pointer to a u64-type object on every CPU */
+  	u64 __percpu	*cpuusage;
+  	struct kernel_cpustat __percpu	*cpustat;
+  };
+
+  // stuff omitted
+
+  void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+  {
+  	unsigned int cpu = task_cpu(tsk);
+  	struct cpuacct *ca;
+
+  	lockdep_assert_rq_held(cpu_rq(cpu));
+
+  	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+  		,*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
+  }
+#+end_src
+
+~cpuacct_charge~ charges a task by locking the run queue for the cpu the task was on (possibly to avoid possible changes to the real cputime value). Then for each task in this group
+of tasks (not cgroup) charges the given ~cputime~ (which comes to ~cgroup_account_cputime~, the caller, as the change in execution time for the task).
+
+From ~include/linux/cgroup-defs.h~ (resource statistics) and ~kernel/cgroup/rstat.c~
+
+#+name: cgroup_rstat_cpu
+#+begin_src c
+  struct cgroup_base_stat {
+  	struct task_cputime cputime;
+
+  #ifdef CONFIG_SCHED_CORE
+  	u64 forceidle_sum;
+  #endif
+  };
+
+  /*
+   * rstat - cgroup scalable recursive statistics.  Accounting is done
+   * per-cpu in cgroup_rstat_cpu which is then lazily propagated up the
+   * hierarchy on reads.
+   *
+   * When a stat gets updated, the cgroup_rstat_cpu and its ancestors are
+   * linked into the updated tree.  On the following read, propagation only
+   * considers and consumes the updated tree.  This makes reading O(the
+   * number of descendants which have been active since last read) instead of
+   * O(the total number of descendants).
+   *
+   * This is important because there can be a lot of (draining) cgroups which
+   * aren't active and stat may be read frequently.  The combination can
+   * become very expensive.  By propagating selectively, increasing reading
+   * frequency decreases the cost of each read.
+   *
+   * This struct hosts both the fields which implement the above -
+   * updated_children and updated_next - and the fields which track basic
+   * resource statistics on top of it - bsync, bstat and last_bstat.
+   */
+  struct cgroup_rstat_cpu {
+  	/*
+  	 * ->bsync protects ->bstat.  These are the only fields which get
+  	 * updated in the hot path.
+  	 */
+  	struct u64_stats_sync bsync;
+  	struct cgroup_base_stat bstat;
+
+  	/*
+  	 * Snapshots at the last reading.  These are used to calculate the
+  	 * deltas to propagate to the global counters.
+  	 */
+  	struct cgroup_base_stat last_bstat;
+
+  	/*
+  	 * Child cgroups with stat updates on this cpu since the last read
+  	 * are linked on the parent's ->updated_children through
+  	 * ->updated_next.
+  	 *
+  	 * In addition to being more compact, singly-linked list pointing
+  	 * to the cgroup makes it unnecessary for each per-cpu struct to
+  	 * point back to the associated cgroup.
+  	 *
+  	 * Protected by per-cpu cgroup_rstat_cpu_lock.
+  	 */
+  	struct cgroup *updated_children;	/* terminated by self cgroup */
+  	struct cgroup *updated_next;		/* NULL iff not on the list */
+  };
+#+end_src
+
+Looks like ~cgroup_rstat_cpu~ fits in by providing some structure to track a cgroups cpu resource statistics.
+
+#+name: __cgroup_account_cputime
+#+begin_src c
+  void __cgroup_account_cputime(struct cgroup *cgrp, u64 delta_exec)
+  {
+  	struct cgroup_rstat_cpu *rstatc;
+  	unsigned long flags;
+
+  	rstatc = cgroup_base_stat_cputime_account_begin(cgrp, &flags);
+  	rstatc->bstat.cputime.sum_exec_runtime += delta_exec;
+  	cgroup_base_stat_cputime_account_end(cgrp, rstatc, flags);
+  }
+#+end_src
+
+~__cgroup_accocunt_cputime~ updates the stats for a cgroup by getting the ~rstatc~ (in what looks like a locking manner) and adds the change in runtime to the current ~sum_exec_runtime~
+
+
+** How ~cgroups~ are Throttled
+
+TODO
+

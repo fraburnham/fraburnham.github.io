@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-07-26 Sat 08:01 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Understanding CPU Bandwidth Throttling with the Completely Fair Scheduler and Control Groups</title>
+<meta name="author" content="Frank Burnham" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="org-style.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Understanding CPU Bandwidth Throttling with the Completely Fair Scheduler and Control Groups</h1>
+<p>
+NOTE: This is for the linux kernel version 6.1.
+</p>
+
+<p>
+NOTE: I have no idea what I'm talking about.
+</p>
+
+<p>
+TODO Overview of how each section joins to make throttling work (use a mermaid diagram! <a href="https://github.com/arnm/ob-mermaid">https://github.com/arnm/ob-mermaid</a>)
+</p>
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7286644">1. How Consumed CPU Bandwidth is Calculated and Tracked for <code>cgroups</code></a></li>
+<li><a href="#org41959ac">2. How <code>cgroups</code> are Throttled</a></li>
+</ul>
+</div>
+<div id="outline-container-org7286644" class="outline-2">
+<h2 id="org7286644"><span class="section-number-2">1.</span> How Consumed CPU Bandwidth is Calculated and Tracked for <code>cgroups</code></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<code>update_curr</code> is called, at least, when a <code>sched_entity</code> is enqueued or dequeued (by <code>enqueue_entity</code> and <code>dequeue_entity</code> respectively). It calls <code>cgroup_account_cputime</code> which handles
+propagating the consumed bandwitdth to all entities in the <code>cgroup</code>.
+</p>
+
+<p>
+From <code>include/linux/sched.h</code> TODO: omit fields from struct defs that aren't used in the interesting code paths
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org6c0f9a5"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_group</span> {
+  <span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>
+<span style="color: #828997;">#ifdef</span> CONFIG_FAIR_GROUP_SCHED
+        <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">schedulable entities of this group on each CPU</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span>     **<span style="color: #E06C75;">se</span>;
+        <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">runqueue "owned" by this group on each CPU</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cfs_rq</span>           **<span style="color: #E06C75;">cfs_rq</span>;
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span>           <span style="color: #E06C75;">shares</span>;
+
+        <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">A positive value indicates that this is a SCHED_IDLE group.</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #E5C07B;">int</span>                     <span style="color: #E06C75;">idle</span>;
+
+<span style="color: #828997;">#ifdef</span>  CONFIG_SMP
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * load_avg can be heavily contended at clock tick time, so put
+         * it in its own cacheline separated from the fields above which
+         * will also be accessed at each tick.
+</span><span style="color: #5C6370;">         */</span>
+        atomic_long_t           <span style="color: #E5C07B;">load_avg</span> <span style="color: #E06C75;">____cacheline_aligned</span>;
+<span style="color: #828997;">#endif</span>
+<span style="color: #828997;">#endif</span>
+
+  <span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_group</span>       *<span style="color: #E06C75;">parent</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">list_head</span>        <span style="color: #E06C75;">siblings</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">list_head</span>        <span style="color: #E06C75;">children</span>;
+
+  <span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cfs_bandwidth</span>    <span style="color: #E06C75;">cfs_bandwidth</span>;
+
+  <span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>};
+
+<span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>
+<span style="color: #5C6370;">/* </span><span style="color: #5C6370;">CFS-related fields in a runqueue</span><span style="color: #5C6370;"> */</span>
+<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cfs_rq</span> {
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">load_weight</span>      <span style="color: #E06C75;">load</span>;
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">int</span>            <span style="color: #E06C75;">nr_running</span>;
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">int</span>            <span style="color: #E06C75;">h_nr_running</span>;      <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">SCHED_{NORMAL,BATCH,IDLE}</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">int</span>            <span style="color: #E06C75;">idle_nr_running</span>;   <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">SCHED_IDLE</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">int</span>            <span style="color: #E06C75;">idle_h_nr_running</span>; <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">SCHED_IDLE</span><span style="color: #5C6370;"> */</span>
+
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">exec_clock</span>;
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">min_vruntime</span>;
+<span style="color: #828997;">#ifdef</span> CONFIG_SCHED_CORE
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">int</span>            <span style="color: #E06C75;">forceidle_seq</span>;
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">min_vruntime_fi</span>;
+<span style="color: #828997;">#endif</span>
+
+<span style="color: #828997;">#if</span><span style="color: #828997;">n</span><span style="color: #828997;">def</span> CONFIG_64BIT
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">min_vruntime_copy</span>;
+<span style="color: #828997;">#endif</span>
+
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">rb_root_cached</span>   <span style="color: #E06C75;">tasks_timeline</span>;
+
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * 'curr' points to currently running entity on this cfs_rq.
+         * It is set to NULL otherwise (i.e when none are currently running).
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span>     *<span style="color: #E06C75;">curr</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span>     *<span style="color: #E06C75;">next</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span>     *<span style="color: #E06C75;">last</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span>     *<span style="color: #E06C75;">skip</span>;
+
+  <span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>
+<span style="color: #828997;">#ifdef</span> CONFIG_SMP
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * CFS load tracking
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_avg</span>        <span style="color: #E06C75;">avg</span>;
+<span style="color: #828997;">#if</span><span style="color: #828997;">n</span><span style="color: #828997;">def</span> CONFIG_64BIT
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">last_update_time_copy</span>;
+<span style="color: #828997;">#endif</span>
+        <span style="color: #C678DD;">struct</span> {
+                raw_spinlock_t  <span style="color: #E5C07B;">lock</span> <span style="color: #E06C75;">____cacheline_aligned</span>;
+                <span style="color: #E5C07B;">int</span>             <span style="color: #E06C75;">nr</span>;
+                <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span>   <span style="color: #E06C75;">load_avg</span>;
+                <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span>   <span style="color: #E06C75;">util_avg</span>;
+                <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span>   <span style="color: #E06C75;">runnable_avg</span>;
+        } <span style="color: #E06C75;">removed</span>;
+
+<span style="color: #828997;">#ifdef</span> CONFIG_FAIR_GROUP_SCHED
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span>           <span style="color: #E06C75;">tg_load_avg_contrib</span>;
+        <span style="color: #E5C07B;">long</span>                    <span style="color: #E06C75;">propagate</span>;
+        <span style="color: #E5C07B;">long</span>                    <span style="color: #E06C75;">prop_runnable_sum</span>;
+
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         *   h_load = weight * f(tg)
+         *
+         * Where f(tg) is the recursive weight fraction assigned to
+         * this group.
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span>           <span style="color: #E06C75;">h_load</span>;
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">last_h_load_update</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span>     *<span style="color: #E06C75;">h_load_next</span>;
+<span style="color: #828997;">#endif</span> <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">CONFIG_FAIR_GROUP_SCHED</span><span style="color: #5C6370;"> */</span>
+<span style="color: #828997;">#endif</span> <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">CONFIG_SMP</span><span style="color: #5C6370;"> */</span>
+
+<span style="color: #828997;">#ifdef</span> CONFIG_FAIR_GROUP_SCHED
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">rq</span>               *<span style="color: #E06C75;">rq</span>;    <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">CPU runqueue to which this cfs_rq is attached</span><span style="color: #5C6370;"> */</span>
+
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * leaf cfs_rqs are those that hold tasks (lowest schedulable entity in
+         * a hierarchy). Non-leaf lrqs hold other higher schedulable entities
+         * (like users, containers etc.)
+         *
+         * leaf_cfs_rq_list ties together list of leaf cfs_rq's in a CPU.
+         * This list is used during load balance.
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #E5C07B;">int</span>                     <span style="color: #E06C75;">on_list</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">list_head</span>        <span style="color: #E06C75;">leaf_cfs_rq_list</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_group</span>       *<span style="color: #E06C75;">tg</span>;    <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">group that "owns" this runqueue</span><span style="color: #5C6370;"> */</span>
+
+        <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">Locally cached copy of our task_group's idle value</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #E5C07B;">int</span>                     <span style="color: #E06C75;">idle</span>;
+
+<span style="color: #828997;">#ifdef</span> CONFIG_CFS_BANDWIDTH
+        <span style="color: #E5C07B;">int</span>                     <span style="color: #E06C75;">runtime_enabled</span>;
+        <span style="color: #E5C07B;">s64</span>                     <span style="color: #E06C75;">runtime_remaining</span>;
+
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">throttled_pelt_idle</span>;
+<span style="color: #828997;">#if</span><span style="color: #828997;">n</span><span style="color: #828997;">def</span> CONFIG_64BIT
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">throttled_pelt_idle_copy</span>;
+<span style="color: #828997;">#endif</span>
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">throttled_clock</span>;
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">throttled_clock_pelt</span>;
+        <span style="color: #E5C07B;">u64</span>                     <span style="color: #E06C75;">throttled_clock_pelt_time</span>;
+        <span style="color: #E5C07B;">int</span>                     <span style="color: #E06C75;">throttled</span>;
+        <span style="color: #E5C07B;">int</span>                     <span style="color: #E06C75;">throttle_count</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">list_head</span>        <span style="color: #E06C75;">throttled_list</span>;
+<span style="color: #828997;">#endif</span> <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">CONFIG_CFS_BANDWIDTH</span><span style="color: #5C6370;"> */</span>
+<span style="color: #828997;">#endif</span> <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">CONFIG_FAIR_GROUP_SCHED</span><span style="color: #5C6370;"> */</span>
+};
+</pre>
+</div>
+
+<p>
+The <code>task_group</code> knows about the <code>sched_entities</code> and <code>cfs_rqs</code> that the group uses (one per cpu that the group uses). It also keeps track of the <code>cfs_bandwidth</code> which is used when
+determining if a <code>cgroup</code> should be throttled. Each <code>cfs_rq</code> is also keeps track of bandwidth consumed.
+</p>
+
+<p>
+From <code>kernel/sched/fair.c</code> (cfs scheduler)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org9b8e452"><span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+ * Update the current task's runtime statistics.
+</span><span style="color: #5C6370;"> */</span>
+<span style="color: #C678DD;">static</span> <span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">update_curr</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cfs_rq</span> *<span style="color: #E06C75;">cfs_rq</span>)
+{
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_entity</span> *<span style="color: #E06C75;">curr</span> = cfs_rq-&gt;curr;
+        <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">now</span> = rq_clock_task(rq_of(cfs_rq));
+        <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">delta_exec</span>;
+
+        <span style="color: #C678DD;">if</span> (unlikely(!curr))
+                <span style="color: #C678DD;">return</span>;
+
+        delta_exec = now - curr-&gt;exec_start;
+        <span style="color: #C678DD;">if</span> (unlikely((<span style="color: #E5C07B;">s64</span>)delta_exec &lt;= 0))
+                <span style="color: #C678DD;">return</span>;
+
+        curr-&gt;exec_start = now;
+
+        <span style="color: #C678DD;">if</span> (schedstat_enabled()) {
+                <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">sched_statistics</span> *<span style="color: #E06C75;">stats</span>;
+
+                stats = __schedstats_from_se(curr);
+                __schedstat_set(stats-&gt;exec_max,
+                                max(delta_exec, stats-&gt;exec_max));
+        }
+
+        curr-&gt;sum_exec_runtime += delta_exec;
+        schedstat_add(cfs_rq-&gt;exec_clock, delta_exec);
+
+        curr-&gt;vruntime += calc_delta_fair(delta_exec, curr);
+        update_min_vruntime(cfs_rq);
+
+        <span style="color: #C678DD;">if</span> (entity_is_task(curr)) {
+                <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_struct</span> *<span style="color: #E06C75;">curtask</span> = task_of(curr);
+
+                trace_sched_stat_runtime(curtask, delta_exec, curr-&gt;vruntime);
+                cgroup_account_cputime(curtask, delta_exec);
+                account_group_exec_runtime(curtask, delta_exec);
+        }
+
+        account_cfs_rq_runtime(cfs_rq, delta_exec);
+}
+</pre>
+</div>
+
+<p>
+<code>update_curr</code> is called for a variety of reasons like a task being enqueued or dequeued. It updates the <code>sched_entity</code> (the smallest scheduleable unit) that is currently running (or
+task if the current entity is a task) in this <code>cfs_rq</code>. It calls <code>cgroup_account_cputime</code> to handle tracking bandwidth usage for a <code>cgroup</code>.
+</p>
+
+<p>
+From <code>include/linux/cgroup.h</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org13006a1"><span style="color: #C678DD;">static</span> <span style="color: #C678DD;">inline</span> <span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">cgroup_account_cputime</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_struct</span> *<span style="color: #E06C75;">task</span>,
+                                          <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">delta_exec</span>)
+{
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">cgrp</span>;
+
+        cpuacct_charge(task, delta_exec);
+
+        cgrp = task_dfl_cgroup(task);
+        <span style="color: #C678DD;">if</span> (cgroup_parent(cgrp))
+                __cgroup_account_cputime(cgrp, delta_exec);
+}
+</pre>
+</div>
+
+<p>
+Given a task struct and a change in execution time, <code>cgroup_account_cputime</code> charges the task for the consumed bandwidth. If the task is a member of a group and it is not the parent,
+handle group accounting.
+</p>
+
+<p>
+From <code>kernel/sched/cpuacct.c</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org254e8cf"><span style="color: #5C6370;">/* </span><span style="color: #5C6370;">track CPU usage of a group of tasks and its child groups</span><span style="color: #5C6370;"> */</span>
+<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cpuacct</span> {
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_subsys_state</span>      <span style="color: #E06C75;">css</span>;
+        <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">cpuusage holds pointer to a u64-type object on every CPU</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #E5C07B;">u64</span> <span style="color: #E5C07B;">__percpu</span>    *<span style="color: #E06C75;">cpuusage</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">kernel_cpustat</span> <span style="color: #E06C75;">__percpu</span>  *cpustat;
+};
+
+<span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
+</span>
+<span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">cpuacct_charge</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_struct</span> *<span style="color: #E06C75;">tsk</span>, <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">cputime</span>)
+{
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">int</span> <span style="color: #E06C75;">cpu</span> = task_cpu(tsk);
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cpuacct</span> *<span style="color: #E06C75;">ca</span>;
+
+        lockdep_assert_rq_held(cpu_rq(cpu));
+
+        <span style="color: #C678DD;">for</span> (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+                *per_cpu_ptr(ca-&gt;cpuusage, cpu) += cputime;
+}
+</pre>
+</div>
+
+<p>
+<code>cpuacct_charge</code> charges a task by locking the run queue for the cpu the task was on (possibly to avoid possible changes to the real cputime value). Then for each task in this group
+of tasks (not cgroup) charges the given <code>cputime</code> (which comes to <code>cgroup_account_cputime</code>, the caller, as the change in execution time for the task).
+</p>
+
+<p>
+From <code>include/linux/cgroup-defs.h</code> (resource statistics) and <code>kernel/cgroup/rstat.c</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgfdc6895"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_base_stat</span> {
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_cputime</span> <span style="color: #E06C75;">cputime</span>;
+
+<span style="color: #828997;">#ifdef</span> CONFIG_SCHED_CORE
+        <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">forceidle_sum</span>;
+<span style="color: #828997;">#endif</span>
+};
+
+<span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+ * rstat - cgroup scalable recursive statistics.  Accounting is done
+ * per-cpu in cgroup_rstat_cpu which is then lazily propagated up the
+ * hierarchy on reads.
+ *
+ * When a stat gets updated, the cgroup_rstat_cpu and its ancestors are
+ * linked into the updated tree.  On the following read, propagation only
+ * considers and consumes the updated tree.  This makes reading O(the
+ * number of descendants which have been active since last read) instead of
+ * O(the total number of descendants).
+ *
+ * This is important because there can be a lot of (draining) cgroups which
+ * aren't active and stat may be read frequently.  The combination can
+ * become very expensive.  By propagating selectively, increasing reading
+ * frequency decreases the cost of each read.
+ *
+ * This struct hosts both the fields which implement the above -
+ * updated_children and updated_next - and the fields which track basic
+ * resource statistics on top of it - bsync, bstat and last_bstat.
+</span><span style="color: #5C6370;"> */</span>
+<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_rstat_cpu</span> {
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * -&gt;bsync protects -&gt;bstat.  These are the only fields which get
+         * updated in the hot path.
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">u64_stats_sync</span> <span style="color: #E06C75;">bsync</span>;
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_base_stat</span> <span style="color: #E06C75;">bstat</span>;
+
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * Snapshots at the last reading.  These are used to calculate the
+         * deltas to propagate to the global counters.
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_base_stat</span> <span style="color: #E06C75;">last_bstat</span>;
+
+        <span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+         * Child cgroups with stat updates on this cpu since the last read
+         * are linked on the parent's -&gt;updated_children through
+         * -&gt;updated_next.
+         *
+         * In addition to being more compact, singly-linked list pointing
+         * to the cgroup makes it unnecessary for each per-cpu struct to
+         * point back to the associated cgroup.
+         *
+         * Protected by per-cpu cgroup_rstat_cpu_lock.
+</span><span style="color: #5C6370;">         */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">updated_children</span>;        <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">terminated by self cgroup</span><span style="color: #5C6370;"> */</span>
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">updated_next</span>;            <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">NULL iff not on the list</span><span style="color: #5C6370;"> */</span>
+};
+</pre>
+</div>
+
+<p>
+Looks like <code>cgroup_rstat_cpu</code> fits in by providing some structure to track a cgroups cpu resource statistics.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org7065fcb"><span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">__cgroup_account_cputime</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">cgrp</span>, <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">delta_exec</span>)
+{
+        <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_rstat_cpu</span> *<span style="color: #E06C75;">rstatc</span>;
+        <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span> <span style="color: #E06C75;">flags</span>;
+
+        rstatc = cgroup_base_stat_cputime_account_begin(cgrp, &amp;flags);
+        rstatc-&gt;bstat.cputime.sum_exec_runtime += delta_exec;
+        cgroup_base_stat_cputime_account_end(cgrp, rstatc, flags);
+}
+</pre>
+</div>
+
+<p>
+<code>__cgroup_accocunt_cputime</code> updates the stats for a cgroup by getting the <code>rstatc</code> (in what looks like a locking manner) and adds the change in runtime to the current <code>sum_exec_runtime</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org41959ac" class="outline-2">
+<h2 id="org41959ac"><span class="section-number-2">2.</span> How <code>cgroups</code> are Throttled</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+TODO
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Frank Burnham</p>
+<p class="date">Created: 2025-07-26 Sat 08:01</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
