@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-26 Sat 08:01 -->
+<!-- 2025-07-26 Sat 09:18 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Understanding CPU Bandwidth Throttling with the Completely Fair Scheduler and Control Groups</title>
@@ -212,12 +212,12 @@ TODO Overview of how each section joins to make throttling work (use a mermaid d
 
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org7286644">1. How Consumed CPU Bandwidth is Calculated and Tracked for <code>cgroups</code></a></li>
-<li><a href="#org41959ac">2. How <code>cgroups</code> are Throttled</a></li>
+<li><a href="#orgda000d0">1. How Consumed CPU Bandwidth is Calculated and Tracked for <code>cgroups</code></a></li>
+<li><a href="#org2efd3be">2. How <code>cgroups</code> are Throttled</a></li>
 </ul>
 </div>
-<div id="outline-container-org7286644" class="outline-2">
-<h2 id="org7286644"><span class="section-number-2">1.</span> How Consumed CPU Bandwidth is Calculated and Tracked for <code>cgroups</code></h2>
+<div id="outline-container-orgda000d0" class="outline-2">
+<h2 id="orgda000d0"><span class="section-number-2">1.</span> How Consumed CPU Bandwidth is Calculated and Tracked for <code>cgroups</code></h2>
 <div class="outline-text-2" id="text-1">
 <p>
 <code>update_curr</code> is called, at least, when a <code>sched_entity</code> is enqueued or dequeued (by <code>enqueue_entity</code> and <code>dequeue_entity</code> respectively). It calls <code>cgroup_account_cputime</code> which handles
@@ -225,11 +225,11 @@ propagating the consumed bandwitdth to all entities in the <code>cgroup</code>.
 </p>
 
 <p>
-From <code>include/linux/sched.h</code> TODO: omit fields from struct defs that aren't used in the interesting code paths
+From <code>include/linux/sched.h</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org6c0f9a5"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_group</span> {
+<pre class="src src-c" id="org627c9ca"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_group</span> {
   <span style="color: #5C6370;">// </span><span style="color: #5C6370;">stuff omitted
 </span>
 <span style="color: #828997;">#ifdef</span> CONFIG_FAIR_GROUP_SCHED
@@ -380,7 +380,7 @@ From <code>kernel/sched/fair.c</code> (cfs scheduler)
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org9b8e452"><span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
+<pre class="src src-c" id="org9ce4cfd"><span style="color: #5C6370;">/*</span><span style="color: #5C6370;">
  * Update the current task's runtime statistics.
 </span><span style="color: #5C6370;"> */</span>
 <span style="color: #C678DD;">static</span> <span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">update_curr</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cfs_rq</span> *<span style="color: #E06C75;">cfs_rq</span>)
@@ -435,7 +435,7 @@ From <code>include/linux/cgroup.h</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org13006a1"><span style="color: #C678DD;">static</span> <span style="color: #C678DD;">inline</span> <span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">cgroup_account_cputime</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_struct</span> *<span style="color: #E06C75;">task</span>,
+<pre class="src src-c" id="org37a2454"><span style="color: #C678DD;">static</span> <span style="color: #C678DD;">inline</span> <span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">cgroup_account_cputime</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_struct</span> *<span style="color: #E06C75;">task</span>,
                                           <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">delta_exec</span>)
 {
         <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">cgrp</span>;
@@ -459,7 +459,7 @@ From <code>kernel/sched/cpuacct.c</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org254e8cf"><span style="color: #5C6370;">/* </span><span style="color: #5C6370;">track CPU usage of a group of tasks and its child groups</span><span style="color: #5C6370;"> */</span>
+<pre class="src src-c" id="org40b46dd"><span style="color: #5C6370;">/* </span><span style="color: #5C6370;">track CPU usage of a group of tasks and its child groups</span><span style="color: #5C6370;"> */</span>
 <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cpuacct</span> {
         <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_subsys_state</span>      <span style="color: #E06C75;">css</span>;
         <span style="color: #5C6370;">/* </span><span style="color: #5C6370;">cpuusage holds pointer to a u64-type object on every CPU</span><span style="color: #5C6370;"> */</span>
@@ -492,7 +492,7 @@ From <code>include/linux/cgroup-defs.h</code> (resource statistics) and <code>ke
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgfdc6895"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_base_stat</span> {
+<pre class="src src-c" id="orgde27361"><span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_base_stat</span> {
         <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">task_cputime</span> <span style="color: #E06C75;">cputime</span>;
 
 <span style="color: #828997;">#ifdef</span> CONFIG_SCHED_CORE
@@ -556,7 +556,7 @@ Looks like <code>cgroup_rstat_cpu</code> fits in by providing some structure to 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org7065fcb"><span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">__cgroup_account_cputime</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">cgrp</span>, <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">delta_exec</span>)
+<pre class="src src-c" id="org7c2f370"><span style="color: #E5C07B;">void</span> <span style="color: #61AFEF;">__cgroup_account_cputime</span>(<span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup</span> *<span style="color: #E06C75;">cgrp</span>, <span style="color: #E5C07B;">u64</span> <span style="color: #E06C75;">delta_exec</span>)
 {
         <span style="color: #C678DD;">struct</span> <span style="color: #E5C07B;">cgroup_rstat_cpu</span> *<span style="color: #E06C75;">rstatc</span>;
         <span style="color: #E5C07B;">unsigned</span> <span style="color: #E5C07B;">long</span> <span style="color: #E06C75;">flags</span>;
@@ -573,18 +573,18 @@ Looks like <code>cgroup_rstat_cpu</code> fits in by providing some structure to 
 </p>
 </div>
 </div>
-<div id="outline-container-org41959ac" class="outline-2">
-<h2 id="org41959ac"><span class="section-number-2">2.</span> How <code>cgroups</code> are Throttled</h2>
+<div id="outline-container-org2efd3be" class="outline-2">
+<h2 id="org2efd3be"><span class="section-number-2">2.</span> How <code>cgroups</code> are Throttled</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-TODO
+TODO I see the cfs<sub>rq</sub> throttle machinery. Is cgroups stuff connected to that? I think the cfs<sub>rq</sub> throttle may be related do involuntary context switches&#x2026;
 </p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Frank Burnham</p>
-<p class="date">Created: 2025-07-26 Sat 08:01</p>
+<p class="date">Created: 2025-07-26 Sat 09:18</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
