@@ -5652,20 +5652,20 @@ var $author$project$View$Board$actionButtons = function (model) {
 						[
 							A2(
 							$elm$html$Html$div,
-							_List_fromArray(
+							A2(
+								$elm$core$List$any,
+								$elm$core$Basics$identity,
+								$elm$core$Array$toList(
+									$author$project$View$Board$flatten(
+										A2(
+											$author$project$Data$Sector$sectorMap,
+											F2(
+												function (newLocation, _v2) {
+													return A2($author$project$Rules$validMoveModel, model, newLocation);
+												}),
+											model.ak)))) ? _List_fromArray(
 								[
-									A2(
-									$elm$core$List$any,
-									$elm$core$Basics$identity,
-									$elm$core$Array$toList(
-										$author$project$View$Board$flatten(
-											A2(
-												$author$project$Data$Sector$sectorMap,
-												F2(
-													function (newLocation, _v2) {
-														return A2($author$project$Rules$validMoveModel, model, newLocation);
-													}),
-												model.ak)))) ? $author$project$View$Board$buttonStyle : $author$project$View$Board$buttonInactiveStyle,
+									$author$project$View$Board$buttonStyle,
 									$elm$html$Html$Events$onClick(
 									$author$project$Types$SelectedAction(
 										$author$project$Types$Move(moveDistance))),
@@ -5673,59 +5673,62 @@ var $author$project$View$Board$actionButtons = function (model) {
 									$author$project$Types$HoveredAction(
 										$author$project$Types$Move(moveDistance))),
 									$elm$html$Html$Events$onMouseLeave($author$project$Types$UnhoveredAction)
-								]),
+								]) : _List_fromArray(
+								[$author$project$View$Board$buttonInactiveStyle]),
 							_List_fromArray(
 								[
 									$elm$html$Html$text('Move')
 								])),
 							A2(
 							$elm$html$Html$div,
-							_List_fromArray(
+							A2(
+								$elm$core$List$any,
+								$elm$core$Basics$identity,
+								$elm$core$Array$toList(
+									$author$project$View$Board$flatten(
+										A2(
+											$author$project$Data$Sector$sectorMap,
+											F2(
+												function (newLocation, _v3) {
+													return A2($author$project$Rules$validMapSectorModel, model, newLocation);
+												}),
+											model.ak)))) ? _List_fromArray(
 								[
-									A2(
-									$elm$core$List$any,
-									$elm$core$Basics$identity,
-									$elm$core$Array$toList(
-										$author$project$View$Board$flatten(
-											A2(
-												$author$project$Data$Sector$sectorMap,
-												F2(
-													function (newLocation, _v3) {
-														return A2($author$project$Rules$validMapSectorModel, model, newLocation);
-													}),
-												model.ak)))) ? $author$project$View$Board$buttonStyle : $author$project$View$Board$buttonInactiveStyle,
+									$author$project$View$Board$buttonStyle,
 									$elm$html$Html$Events$onClick(
 									$author$project$Types$SelectedAction($author$project$Types$MapSector)),
 									$elm$html$Html$Events$onMouseEnter(
 									$author$project$Types$HoveredAction($author$project$Types$MapSector)),
 									$elm$html$Html$Events$onMouseLeave($author$project$Types$UnhoveredAction)
-								]),
+								]) : _List_fromArray(
+								[$author$project$View$Board$buttonInactiveStyle]),
 							_List_fromArray(
 								[
 									$elm$html$Html$text('Map Sector')
 								])),
 							A2(
 							$elm$html$Html$div,
-							_List_fromArray(
+							A2(
+								$elm$core$List$any,
+								$elm$core$Basics$identity,
+								$elm$core$Array$toList(
+									$author$project$View$Board$flatten(
+										A2(
+											$author$project$Data$Sector$sectorMap,
+											F2(
+												function (newLocation, _v4) {
+													return A2($author$project$Rules$validResourceScanModel, model, newLocation);
+												}),
+											model.ak)))) ? _List_fromArray(
 								[
-									A2(
-									$elm$core$List$any,
-									$elm$core$Basics$identity,
-									$elm$core$Array$toList(
-										$author$project$View$Board$flatten(
-											A2(
-												$author$project$Data$Sector$sectorMap,
-												F2(
-													function (newLocation, _v4) {
-														return A2($author$project$Rules$validResourceScanModel, model, newLocation);
-													}),
-												model.ak)))) ? $author$project$View$Board$buttonStyle : $author$project$View$Board$buttonInactiveStyle,
+									$author$project$View$Board$buttonStyle,
 									$elm$html$Html$Events$onClick(
 									$author$project$Types$SelectedAction($author$project$Types$ResourceScan)),
 									$elm$html$Html$Events$onMouseEnter(
 									$author$project$Types$HoveredAction($author$project$Types$ResourceScan)),
 									$elm$html$Html$Events$onMouseLeave($author$project$Types$UnhoveredAction)
-								]),
+								]) : _List_fromArray(
+								[$author$project$View$Board$buttonInactiveStyle]),
 							_List_fromArray(
 								[
 									$elm$html$Html$text('Resource Scan')
@@ -6961,7 +6964,7 @@ var $author$project$View$Rules$movement = function (model) {
 						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('font-medium mx-[0.20rem]')
+								$elm$html$Html$Attributes$class('italic mx-[0.20rem]')
 							]),
 						_List_fromArray(
 							[
@@ -7176,7 +7179,7 @@ var $author$project$View$Rules$upgrades = function (model) {
 							[5, 6, 1])),
 						_Utils_Tuple3(
 						'Terraforming Technology',
-						'Use larger of d12 or d20 for resources in star system sectors.',
+						'Use larger of d12 or d20 for quantity when resource scanning.',
 						_List_fromArray(
 							[2, 3, 1])),
 						_Utils_Tuple3(
