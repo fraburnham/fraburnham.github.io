@@ -6869,6 +6869,43 @@ var $author$project$View$Rules$rulesSection = F2(
 					children)
 				]));
 	});
+var $author$project$View$Rules$anomaly = function (model) {
+	return A2(
+		$author$project$View$Rules$rulesSection,
+		'Anomalies',
+		_List_fromArray(
+			[
+				$elm$html$Html$text('When a 20 is rolled all players are forced to take the Anomaly action.'),
+				$author$project$View$Rules$dieUseTable(
+				_List_fromArray(
+					[
+						_Utils_Tuple3(
+						0,
+						'Anomaly Range',
+						$author$project$Types$Simple('Determines the area of effect of the anomaly.')),
+						_Utils_Tuple3(
+						2,
+						'Anomaly Type',
+						$author$project$Types$Formatted(
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Determines the area of effect of the anomaly.'),
+									$author$project$View$Rules$dieValueTable(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(1, 'Space Rift (forces movement of d6 spaces)'),
+											_Utils_Tuple2(2, 'Energy Surge (reduces mapping and scanning range by 2)'),
+											_Utils_Tuple2(3, 'Asteroid Shower (causes d6 ship damage)'),
+											_Utils_Tuple2(4, 'Gravitational Distortion (destroys resources within half of d4 range)'),
+											_Utils_Tuple2(5, 'Temporal Distortion (doubles the cost of movement next turn)'),
+											_Utils_Tuple2(6, 'Alien Signal (causes mapping and scanning to fail next turn)'),
+											_Utils_Tuple2(7, 'Alien Encounter (causes d6 ship damage)'),
+											_Utils_Tuple2(8, 'Space Pirates (takes resources from d6 different sectors within d4 range)')
+										]))
+								])))
+					]))
+			]));
+};
 var $author$project$View$Rules$mapping = function (model) {
 	var ruleText = '\n            You must map a sector before you\'re able to scan it for resources. Choose one sector within the range determined by the scan range and mark it as having the sector type.\n            ';
 	return A2(
@@ -6984,18 +7021,168 @@ var $author$project$View$Rules$resourceDiscovery = function (model) {
 					]))
 			]));
 };
-var $author$project$View$Rules$actions = function (model) {
+var $author$project$View$Rules$upgradeUsableResourceKindsTableRow = F2(
+	function (bottomBorder, rk) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class(
+					bottomBorder ? 'flex border-r-1 border-black/25' : 'flex')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('p-1 px-2')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(
+							$author$project$Data$Resource$resourceKindToName(rk))
+						]))
+				]));
+	});
+var $author$project$View$Rules$upgradeUsableResourceKindsTableRows = function (valueMeanings) {
+	if (valueMeanings.b) {
+		if (!valueMeanings.b.b) {
+			var rk = valueMeanings.a;
+			return _List_fromArray(
+				[
+					A2($author$project$View$Rules$upgradeUsableResourceKindsTableRow, false, rk)
+				]);
+		} else {
+			var rk = valueMeanings.a;
+			var rest = valueMeanings.b;
+			return A2(
+				$elm$core$List$cons,
+				A2($author$project$View$Rules$upgradeUsableResourceKindsTableRow, true, rk),
+				$author$project$View$Rules$upgradeUsableResourceKindsTableRows(rest));
+		}
+	} else {
+		return _List_Nil;
+	}
+};
+var $author$project$View$Rules$upgradeUsableResourceKindsTable = function (valueMeanings) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$id('action-rules')
+				$elm$html$Html$Attributes$class('my-2 flex flex-row w-full')
 			]),
+		$author$project$View$Rules$upgradeUsableResourceKindsTableRows(valueMeanings));
+};
+var $author$project$View$Rules$upgradeTableRow = F4(
+	function (bottomBorder, name, benefit, usableResourceKinds) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class(
+					bottomBorder ? 'flex border-b-1 border-black/25' : 'flex')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('w-1/4 text-right p-1 pr-2 border-r-1 border-black/25')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(name)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('w-3/4 p-1 pl-2')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(benefit),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('flex flex-row justify-around')
+								]),
+							_List_fromArray(
+								[
+									$author$project$View$Rules$upgradeUsableResourceKindsTable(usableResourceKinds)
+								]))
+						]))
+				]));
+	});
+var $author$project$View$Rules$upgradeTableRows = function (upgradeDetails) {
+	if (upgradeDetails.b) {
+		if (!upgradeDetails.b.b) {
+			var _v1 = upgradeDetails.a;
+			var name = _v1.a;
+			var benefit = _v1.b;
+			var usableResourceKinds = _v1.c;
+			return _List_fromArray(
+				[
+					A4($author$project$View$Rules$upgradeTableRow, false, name, benefit, usableResourceKinds)
+				]);
+		} else {
+			var _v2 = upgradeDetails.a;
+			var name = _v2.a;
+			var benefit = _v2.b;
+			var usableResourceKinds = _v2.c;
+			var rest = upgradeDetails.b;
+			return A2(
+				$elm$core$List$cons,
+				A4($author$project$View$Rules$upgradeTableRow, true, name, benefit, usableResourceKinds),
+				$author$project$View$Rules$upgradeTableRows(rest));
+		}
+	} else {
+		return _List_Nil;
+	}
+};
+var $author$project$View$Rules$upgradeTable = function (upgradeDetails) {
+	return A2(
+		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$author$project$View$Rules$movement(model),
-				$author$project$View$Rules$mapping(model),
-				$author$project$View$Rules$resourceDiscovery(model)
+				$elm$html$Html$Attributes$class('my-2 px-1')
+			]),
+		$author$project$View$Rules$upgradeTableRows(upgradeDetails));
+};
+var $author$project$View$Rules$upgrades = function (model) {
+	return A2(
+		$author$project$View$Rules$rulesSection,
+		'Upgrades',
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Upgrades require 20 resources each to enable.'),
+				$author$project$View$Rules$upgradeTable(
+				_List_fromArray(
+					[
+						_Utils_Tuple3(
+						'Blink Drive',
+						'Double movement points.',
+						_List_fromArray(
+							[5, 6, 1])),
+						_Utils_Tuple3(
+						'Terraforming Technology',
+						'Use larger of d12 or d20 for resources in star system sectors.',
+						_List_fromArray(
+							[2, 3, 1])),
+						_Utils_Tuple3(
+						'Ship Repairs',
+						'Increase resources discovered by 2 and decrease damage received by 1.',
+						_List_fromArray(
+							[4, 3, 1])),
+						_Utils_Tuple3(
+						'Scanner Technology',
+						'Automatically map and scan for resources when entering a sector.',
+						_List_fromArray(
+							[4, 6, 1]))
+					]))
 			]));
 };
 var $author$project$View$Rules$rules = function (model) {
@@ -7004,25 +7191,21 @@ var $author$project$View$Rules$rules = function (model) {
 		_List_fromArray(
 			[
 				$elm$html$Html$Attributes$id('rules'),
-				$elm$html$Html$Attributes$class('flex flex-row justify-start mb-8 w-full p-2 overflow-y-auto')
+				$elm$html$Html$Attributes$class('flex justify-start mb-8 w-full p-2 overflow-y-auto')
 			]),
 		_List_fromArray(
 			[
-				$author$project$View$Rules$actions(model),
 				A2(
 				$elm$html$Html$div,
+				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$id('upgrades-rules')
-					]),
-				_List_Nil),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$id('anomaly-rules')
-					]),
-				_List_Nil)
+						$author$project$View$Rules$movement(model),
+						$author$project$View$Rules$mapping(model),
+						$author$project$View$Rules$resourceDiscovery(model),
+						$author$project$View$Rules$upgrades(model),
+						$author$project$View$Rules$anomaly(model)
+					]))
 			]));
 };
 var $author$project$View$Board$trackingArea = function (model) {
