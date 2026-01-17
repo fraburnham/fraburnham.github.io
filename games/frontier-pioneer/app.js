@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.L.z === region.R.z)
+	if (region.N.z === region.T.z)
 	{
-		return 'on line ' + region.L.z;
+		return 'on line ' + region.N.z;
 	}
-	return 'on lines ' + region.L.z + ' through ' + region.R.z;
+	return 'on lines ' + region.N.z + ' through ' + region.T.z;
 }
 
 
@@ -1861,7 +1861,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aM,
+		impl.aN,
 		impl.a2,
 		impl.aY,
 		function() { return function() {} }
@@ -2728,8 +2728,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		o: func(record.o),
-		M: record.M,
-		J: record.J
+		O: record.O,
+		K: record.K
 	}
 });
 
@@ -2998,10 +2998,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.M;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.O;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.J) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.K) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3988,7 +3988,7 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aM,
+		impl.aN,
 		impl.a2,
 		impl.aY,
 		function(sendToApp, initialModel) {
@@ -4024,11 +4024,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aM,
+		impl.aN,
 		impl.a2,
 		impl.aY,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.K && impl.K(sendToApp)
+			var divertHrefToApp = impl.M && impl.M(sendToApp)
 			var view = impl.a3;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4037,7 +4037,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.au);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aw);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4098,12 +4098,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aP;
-	var onUrlRequest = impl.aQ;
+	var onUrlChange = impl.aQ;
+	var onUrlRequest = impl.aR;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		K: function(sendToApp)
+		M: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4119,9 +4119,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ad === next.ad
-							&& curr.V === next.V
-							&& curr.aa.a === next.aa.a
+							&& curr.af === next.af
+							&& curr.X === next.X
+							&& curr.ac.a === next.ac.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4129,9 +4129,9 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aM: function(flags)
+		aN: function(flags)
 		{
-			return A3(impl.aM, flags, _Browser_getUrl(), key);
+			return A3(impl.aN, flags, _Browser_getUrl(), key);
 		},
 		a3: impl.a3,
 		a2: impl.a2,
@@ -4201,17 +4201,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aJ: 'hidden', av: 'visibilitychange' }
+		? { aK: 'hidden', ax: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aJ: 'mozHidden', av: 'mozvisibilitychange' }
+		? { aK: 'mozHidden', ax: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aJ: 'msHidden', av: 'msvisibilitychange' }
+		? { aK: 'msHidden', ax: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aJ: 'webkitHidden', av: 'webkitvisibilitychange' }
-		: { aJ: 'hidden', av: 'visibilitychange' };
+		? { aK: 'webkitHidden', ax: 'webkitvisibilitychange' }
+		: { aK: 'hidden', ax: 'visibilitychange' };
 }
 
 
@@ -4292,12 +4292,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		ai: _Browser_getScene(),
-		al: {
-			an: _Browser_window.pageXOffset,
-			ao: _Browser_window.pageYOffset,
-			am: _Browser_doc.documentElement.clientWidth,
-			U: _Browser_doc.documentElement.clientHeight
+		aj: _Browser_getScene(),
+		an: {
+			ap: _Browser_window.pageXOffset,
+			aq: _Browser_window.pageYOffset,
+			ao: _Browser_doc.documentElement.clientWidth,
+			W: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4307,8 +4307,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		am: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		U: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ao: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		W: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4331,15 +4331,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			ai: {
-				am: node.scrollWidth,
-				U: node.scrollHeight
+			aj: {
+				ao: node.scrollWidth,
+				W: node.scrollHeight
 			},
-			al: {
-				an: node.scrollLeft,
-				ao: node.scrollTop,
-				am: node.clientWidth,
-				U: node.clientHeight
+			an: {
+				ap: node.scrollLeft,
+				aq: node.scrollTop,
+				ao: node.clientWidth,
+				W: node.clientHeight
 			}
 		};
 	});
@@ -4369,18 +4369,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			ai: _Browser_getScene(),
-			al: {
-				an: x,
-				ao: y,
-				am: _Browser_doc.documentElement.clientWidth,
-				U: _Browser_doc.documentElement.clientHeight
+			aj: _Browser_getScene(),
+			an: {
+				ap: x,
+				aq: y,
+				ao: _Browser_doc.documentElement.clientWidth,
+				W: _Browser_doc.documentElement.clientHeight
 			},
-			aH: {
-				an: x + rect.left,
-				ao: y + rect.top,
-				am: rect.width,
-				U: rect.height
+			aI: {
+				ap: x + rect.left,
+				aq: y + rect.top,
+				ao: rect.width,
+				W: rect.height
 			}
 		};
 	});
@@ -4542,7 +4542,7 @@ var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
 var $author$project$Types$HoveredAction = function (a) {
-	return {$: 3, a: a};
+	return {$: 4, a: a};
 };
 var $author$project$Types$MapSector = {$: 1};
 var $author$project$Types$Move = function (a) {
@@ -4551,20 +4551,47 @@ var $author$project$Types$Move = function (a) {
 var $author$project$Types$ResourceScan = {$: 2};
 var $author$project$Types$RollDice = {$: 1};
 var $author$project$Types$SelectedAction = function (a) {
-	return {$: 5, a: a};
+	return {$: 6, a: a};
 };
-var $author$project$Types$UnhoveredAction = {$: 4};
+var $author$project$Types$UnhoveredAction = {$: 5};
 var $author$project$Data$Effect$activeEffects = function (model) {
 	var _v0 = model.aZ;
 	if (_v0.$ === 1) {
-		return model.aG;
+		return model.aH;
 	} else {
 		var e = _v0.a;
-		return A2($elm$core$List$cons, e, model.aG);
+		return A2($elm$core$List$cons, e, model.aH);
 	}
 };
+var $elm$core$Basics$False = 1;
+var $elm$core$Basics$True = 0;
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
 var $elm$core$Basics$apL = F2(
 	function (f, x) {
+		return f(x);
+	});
+var $elm$core$Basics$apR = F2(
+	function (x, f) {
 		return f(x);
 	});
 var $elm$core$Result$Err = function (a) {
@@ -4588,7 +4615,6 @@ var $elm$core$Result$Ok = function (a) {
 var $elm$json$Json$Decode$OneOf = function (a) {
 	return {$: 2, a: a};
 };
-var $elm$core$Basics$False = 1;
 var $elm$core$Basics$add = _Basics_add;
 var $elm$core$Maybe$Just = function (a) {
 	return {$: 0, a: a};
@@ -4828,10 +4854,6 @@ var $elm$core$Elm$JsArray$initialize = _JsArray_initialize;
 var $elm$core$Array$Leaf = function (a) {
 	return {$: 1, a: a};
 };
-var $elm$core$Basics$apR = F2(
-	function (x, f) {
-		return f(x);
-	});
 var $elm$core$Basics$eq = _Utils_equal;
 var $elm$core$Basics$floor = _Basics_floor;
 var $elm$core$Elm$JsArray$length = _JsArray_length;
@@ -4950,7 +4972,6 @@ var $elm$core$Array$initialize = F2(
 			return A5($elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
-var $elm$core$Basics$True = 0;
 var $elm$core$Result$isOk = function (result) {
 	if (!result.$) {
 		return true;
@@ -4982,38 +5003,229 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$View$Board$buttonInactiveStyle = $elm$html$Html$Attributes$class('flex items-center justify-center border-1 rounded size-fit py-2 w-1/4 h-full mx-1 blur-[1px] opacity-50');
 var $author$project$View$Board$buttonStyle = $elm$html$Html$Attributes$class('flex items-center justify-center border-1 rounded size-fit py-2 w-1/4 h-full hover:font-medium hover:border-2 mx-1');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$core$Elm$JsArray$appendN = _JsArray_appendN;
+var $elm$core$Elm$JsArray$slice = _JsArray_slice;
+var $elm$core$Array$appendHelpBuilder = F2(
+	function (tail, builder) {
+		var tailLen = $elm$core$Elm$JsArray$length(tail);
+		var notAppended = ($elm$core$Array$branchFactor - $elm$core$Elm$JsArray$length(builder.c)) - tailLen;
+		var appended = A3($elm$core$Elm$JsArray$appendN, $elm$core$Array$branchFactor, builder.c, tail);
+		return (notAppended < 0) ? {
+			d: A2(
+				$elm$core$List$cons,
+				$elm$core$Array$Leaf(appended),
+				builder.d),
+			a: builder.a + 1,
+			c: A3($elm$core$Elm$JsArray$slice, notAppended, tailLen, tail)
+		} : ((!notAppended) ? {
+			d: A2(
+				$elm$core$List$cons,
+				$elm$core$Array$Leaf(appended),
+				builder.d),
+			a: builder.a + 1,
+			c: $elm$core$Elm$JsArray$empty
+		} : {d: builder.d, a: builder.a, c: appended});
+	});
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Elm$JsArray$push = _JsArray_push;
+var $elm$core$Elm$JsArray$singleton = _JsArray_singleton;
+var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var $elm$core$Elm$JsArray$unsafeSet = _JsArray_unsafeSet;
+var $elm$core$Array$insertTailInTree = F4(
+	function (shift, index, tail, tree) {
+		var pos = $elm$core$Array$bitMask & (index >>> shift);
+		if (_Utils_cmp(
+			pos,
+			$elm$core$Elm$JsArray$length(tree)) > -1) {
+			if (shift === 5) {
+				return A2(
+					$elm$core$Elm$JsArray$push,
+					$elm$core$Array$Leaf(tail),
+					tree);
+			} else {
+				var newSub = $elm$core$Array$SubTree(
+					A4($elm$core$Array$insertTailInTree, shift - $elm$core$Array$shiftStep, index, tail, $elm$core$Elm$JsArray$empty));
+				return A2($elm$core$Elm$JsArray$push, newSub, tree);
+			}
+		} else {
+			var value = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (!value.$) {
+				var subTree = value.a;
+				var newSub = $elm$core$Array$SubTree(
+					A4($elm$core$Array$insertTailInTree, shift - $elm$core$Array$shiftStep, index, tail, subTree));
+				return A3($elm$core$Elm$JsArray$unsafeSet, pos, newSub, tree);
+			} else {
+				var newSub = $elm$core$Array$SubTree(
+					A4(
+						$elm$core$Array$insertTailInTree,
+						shift - $elm$core$Array$shiftStep,
+						index,
+						tail,
+						$elm$core$Elm$JsArray$singleton(value)));
+				return A3($elm$core$Elm$JsArray$unsafeSet, pos, newSub, tree);
+			}
+		}
+	});
+var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var $elm$core$Array$unsafeReplaceTail = F2(
+	function (newTail, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var originalTailLen = $elm$core$Elm$JsArray$length(tail);
+		var newTailLen = $elm$core$Elm$JsArray$length(newTail);
+		var newArrayLen = len + (newTailLen - originalTailLen);
+		if (_Utils_eq(newTailLen, $elm$core$Array$branchFactor)) {
+			var overflow = _Utils_cmp(newArrayLen >>> $elm$core$Array$shiftStep, 1 << startShift) > 0;
+			if (overflow) {
+				var newShift = startShift + $elm$core$Array$shiftStep;
+				var newTree = A4(
+					$elm$core$Array$insertTailInTree,
+					newShift,
+					len,
+					newTail,
+					$elm$core$Elm$JsArray$singleton(
+						$elm$core$Array$SubTree(tree)));
+				return A4($elm$core$Array$Array_elm_builtin, newArrayLen, newShift, newTree, $elm$core$Elm$JsArray$empty);
+			} else {
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					newArrayLen,
+					startShift,
+					A4($elm$core$Array$insertTailInTree, startShift, len, newTail, tree),
+					$elm$core$Elm$JsArray$empty);
+			}
+		} else {
+			return A4($elm$core$Array$Array_elm_builtin, newArrayLen, startShift, tree, newTail);
+		}
+	});
+var $elm$core$Array$appendHelpTree = F2(
+	function (toAppend, array) {
+		var len = array.a;
+		var tree = array.c;
+		var tail = array.d;
+		var itemsToAppend = $elm$core$Elm$JsArray$length(toAppend);
+		var notAppended = ($elm$core$Array$branchFactor - $elm$core$Elm$JsArray$length(tail)) - itemsToAppend;
+		var appended = A3($elm$core$Elm$JsArray$appendN, $elm$core$Array$branchFactor, tail, toAppend);
+		var newArray = A2($elm$core$Array$unsafeReplaceTail, appended, array);
+		if (notAppended < 0) {
+			var nextTail = A3($elm$core$Elm$JsArray$slice, notAppended, itemsToAppend, toAppend);
+			return A2($elm$core$Array$unsafeReplaceTail, nextTail, newArray);
+		} else {
+			return newArray;
+		}
+	});
+var $elm$core$Elm$JsArray$foldl = _JsArray_foldl;
+var $elm$core$Array$builderFromArray = function (_v0) {
+	var len = _v0.a;
+	var tree = _v0.c;
+	var tail = _v0.d;
+	var helper = F2(
+		function (node, acc) {
+			if (!node.$) {
+				var subTree = node.a;
+				return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
+			} else {
+				return A2($elm$core$List$cons, node, acc);
+			}
+		});
+	return {
+		d: A3($elm$core$Elm$JsArray$foldl, helper, _List_Nil, tree),
+		a: (len / $elm$core$Array$branchFactor) | 0,
+		c: tail
+	};
+};
+var $elm$core$Array$append = F2(
+	function (a, _v0) {
+		var aTail = a.d;
+		var bLen = _v0.a;
+		var bTree = _v0.c;
+		var bTail = _v0.d;
+		if (_Utils_cmp(bLen, $elm$core$Array$branchFactor * 4) < 1) {
+			var foldHelper = F2(
+				function (node, array) {
+					if (!node.$) {
+						var tree = node.a;
+						return A3($elm$core$Elm$JsArray$foldl, foldHelper, array, tree);
+					} else {
+						var leaf = node.a;
+						return A2($elm$core$Array$appendHelpTree, leaf, array);
+					}
+				});
+			return A2(
+				$elm$core$Array$appendHelpTree,
+				bTail,
+				A3($elm$core$Elm$JsArray$foldl, foldHelper, a, bTree));
+		} else {
+			var foldHelper = F2(
+				function (node, builder) {
+					if (!node.$) {
+						var tree = node.a;
+						return A3($elm$core$Elm$JsArray$foldl, foldHelper, builder, tree);
+					} else {
+						var leaf = node.a;
+						return A2($elm$core$Array$appendHelpBuilder, leaf, builder);
+					}
+				});
+			return A2(
+				$elm$core$Array$builderToArray,
+				true,
+				A2(
+					$elm$core$Array$appendHelpBuilder,
+					bTail,
+					A3(
+						$elm$core$Elm$JsArray$foldl,
+						foldHelper,
+						$elm$core$Array$builderFromArray(a),
+						bTree)));
+		}
+	});
+var $elm$core$Array$foldl = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (!node.$) {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldl,
+			func,
+			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
+			tail);
+	});
+var $author$project$View$Board$flatten = function (arr) {
+	return A3(
+		$elm$core$Array$foldl,
+		F2(
+			function (acc, el) {
+				return A2($elm$core$Array$append, acc, el);
+			}),
+		$elm$core$Array$empty,
+		arr);
+};
+var $elm$core$Basics$identity = function (x) {
+	return x;
+};
 var $elm$core$Basics$composeR = F3(
 	function (f, g, x) {
 		return g(
 			f(x));
 	});
 var $author$project$Types$MovementImpaired = {$: 1};
-var $elm$core$Basics$identity = function (x) {
-	return x;
-};
-var $elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
 var $elm$core$List$member = F2(
 	function (x, xs) {
 		return A2(
@@ -5024,25 +5236,15 @@ var $elm$core$List$member = F2(
 			xs);
 	});
 var $author$project$Rules$movementImpaired = function (effects) {
-	var _v0 = A2($elm$core$List$member, $author$project$Types$MovementImpaired, effects);
-	if (!_v0) {
-		return $elm$core$Basics$identity;
-	} else {
-		return function (d) {
-			return (d / 2) | 0;
-		};
-	}
+	return A2($elm$core$List$member, $author$project$Types$MovementImpaired, effects) ? function (d) {
+		return (d / 2) | 0;
+	} : $elm$core$Basics$identity;
 };
 var $author$project$Types$MovementImproved = {$: 5};
 var $author$project$Rules$movementImproved = function (effects) {
-	var _v0 = A2($elm$core$List$member, $author$project$Types$MovementImproved, effects);
-	if (!_v0) {
-		return $elm$core$Basics$identity;
-	} else {
-		return function (d) {
-			return d * 2;
-		};
-	}
+	return A2($elm$core$List$member, $author$project$Types$MovementImproved, effects) ? function (d) {
+		return d * 2;
+	} : $elm$core$Basics$identity;
 };
 var $author$project$Rules$movementDistanceModifier = F2(
 	function (effects, distance) {
@@ -5081,8 +5283,336 @@ var $elm$html$Html$Events$onMouseLeave = function (msg) {
 		'mouseleave',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var $elm$core$Array$indexedMap = F2(
+	function (func, _v0) {
+		var len = _v0.a;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var initialBuilder = {
+			d: _List_Nil,
+			a: 0,
+			c: A3(
+				$elm$core$Elm$JsArray$indexedMap,
+				func,
+				$elm$core$Array$tailIndex(len),
+				tail)
+		};
+		var helper = F2(
+			function (node, builder) {
+				if (!node.$) {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, builder, subTree);
+				} else {
+					var leaf = node.a;
+					var offset = builder.a * $elm$core$Array$branchFactor;
+					var mappedLeaf = $elm$core$Array$Leaf(
+						A3($elm$core$Elm$JsArray$indexedMap, func, offset, leaf));
+					return {
+						d: A2($elm$core$List$cons, mappedLeaf, builder.d),
+						a: builder.a + 1,
+						c: builder.c
+					};
+				}
+			});
+		return A2(
+			$elm$core$Array$builderToArray,
+			true,
+			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
+	});
+var $author$project$Data$Sector$sectorMap = F2(
+	function (fn, sectors) {
+		return A2(
+			$elm$core$Array$indexedMap,
+			F2(
+				function (rowNum, row) {
+					return A2(
+						$elm$core$Array$indexedMap,
+						F2(
+							function (colNum, sector) {
+								return A2(
+									fn,
+									{G: colNum, L: rowNum},
+									sector);
+							}),
+						row);
+				}),
+			sectors);
+	});
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (index >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (!_v0.$) {
+				var subTree = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _v0.a;
+				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var $elm$core$Array$get = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
+			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
+			A3($elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var $author$project$Data$Sector$getSector = F2(
+	function (model, coords) {
+		var _v0 = A2($elm$core$Array$get, coords.L, model.ak);
+		if (_v0.$ === 1) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var row = _v0.a;
+			return A2($elm$core$Array$get, coords.G, row);
+		}
+	});
+var $author$project$Types$ScanningImpaired = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Rules$canScan = function (effects) {
+	return !A2(
+		$elm$core$List$member,
+		$author$project$Types$ScanningImpaired(
+			{E: true}),
+		effects);
+};
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $author$project$Rules$gameDistance = F2(
+	function (a, b) {
+		return $elm$core$Basics$abs(a.L - b.L) + $elm$core$Basics$abs(a.G - b.G);
+	});
+var $author$project$Rules$scanningDistanceModifier = F2(
+	function (effects, distance) {
+		var getDistanceModifierFn = function (eff) {
+			if (A2($elm$core$List$member, eff, effects)) {
+				if (!eff.$) {
+					var details = eff.a;
+					return details.E ? function (_v1) {
+						return 0;
+					} : function (d) {
+						return d + 2;
+					};
+				} else {
+					return $elm$core$Basics$identity;
+				}
+			} else {
+				return $elm$core$Basics$identity;
+			}
+		};
+		return A4(
+			$elm$core$List$foldl,
+			F2(
+				function (eff, fn) {
+					return A2(
+						$elm$core$Basics$composeR,
+						fn,
+						getDistanceModifierFn(eff));
+				}),
+			$elm$core$Basics$identity,
+			_List_fromArray(
+				[
+					$author$project$Types$ScanningImpaired(
+					{E: false}),
+					$author$project$Types$ScanningImpaired(
+					{E: true})
+				]),
+			distance);
+	});
+var $author$project$Rules$validScanCommon = F5(
+	function (effects, range, sector, curLocation, sectorLocation) {
+		return $author$project$Rules$canScan(effects) && (_Utils_cmp(
+			A2(
+				$author$project$Rules$scanningDistanceModifier,
+				effects,
+				A2($author$project$Rules$gameDistance, curLocation, sectorLocation)),
+			range) < 1);
+	});
+var $author$project$Rules$validMapSector = F5(
+	function (effects, range, sector, curLocation, sectorLocation) {
+		return A5($author$project$Rules$validScanCommon, effects, range, sector, curLocation, sectorLocation) && function () {
+			if (!sector.$) {
+				return false;
+			} else {
+				return true;
+			}
+		}();
+	});
+var $author$project$Rules$validMapSectorModel = F2(
+	function (model, sectorLocation) {
+		var _v0 = model.aO;
+		if (_v0.$ === 1) {
+			return false;
+		} else {
+			var l = _v0.a;
+			var _v1 = model.a1;
+			if (_v1.$ === 1) {
+				return false;
+			} else {
+				var t = _v1.a;
+				var _v2 = A2($author$project$Data$Sector$getSector, model, sectorLocation);
+				if (_v2.$ === 1) {
+					return false;
+				} else {
+					var s = _v2.a;
+					return A5(
+						$author$project$Rules$validMapSector,
+						$author$project$Data$Effect$activeEffects(model),
+						t.aV.R,
+						s,
+						l,
+						sectorLocation);
+				}
+			}
+		}
+	});
+var $author$project$Rules$validMoveHover = F3(
+	function (movesLeft, curLocation, newLocation) {
+		return (movesLeft > 0) && (_Utils_cmp(
+			A2($author$project$Rules$gameDistance, curLocation, newLocation),
+			movesLeft) < 1);
+	});
+var $author$project$Rules$validMoveModel = F2(
+	function (model, newLocation) {
+		var _v0 = model.aO;
+		if (_v0.$ === 1) {
+			return false;
+		} else {
+			var l = _v0.a;
+			var _v1 = model.a1;
+			if (_v1.$ === 1) {
+				return false;
+			} else {
+				var t = _v1.a;
+				return A3($author$project$Rules$validMoveHover, t.aV.aB, l, newLocation);
+			}
+		}
+	});
+var $author$project$Types$DarkMatter = 5;
+var $author$project$Types$ExoticMinerals = 6;
+var $author$project$Types$MetalAlloys = 3;
+var $author$project$Types$None = 0;
+var $author$project$Types$RawMetals = 2;
+var $author$project$Types$Silicon = 4;
+var $author$project$Types$Water = 1;
+var $author$project$Data$Resource$intToResourceKind = function (i) {
+	switch (i) {
+		case 2:
+			return 1;
+		case 3:
+			return 2;
+		case 4:
+			return 3;
+		case 5:
+			return 4;
+		case 6:
+			return 5;
+		case 7:
+			return 6;
+		default:
+			return 0;
+	}
+};
+var $author$project$Rules$validResourceScan = F6(
+	function (turnState, effects, range, sector, curLocation, sectorLocation) {
+		return A5($author$project$Rules$validScanCommon, effects, range, sector, curLocation, sectorLocation) && function () {
+			if (sector.$ === 1) {
+				return false;
+			} else {
+				var s = sector.a;
+				return true && function () {
+					var _v1 = s.aT;
+					if (!_v1.$) {
+						return false;
+					} else {
+						return true && function () {
+							var _v2 = $author$project$Data$Resource$intToResourceKind(turnState.aV.aD);
+							switch (_v2) {
+								case 1:
+									var _v3 = s.H;
+									if (!_v3) {
+										return false;
+									} else {
+										return true;
+									}
+								case 5:
+									var _v4 = s.H;
+									if (_v4 === 1) {
+										return false;
+									} else {
+										return true;
+									}
+								case 6:
+									var _v5 = s.H;
+									if (_v5 === 1) {
+										return false;
+									} else {
+										return true;
+									}
+								default:
+									return true;
+							}
+						}();
+					}
+				}();
+			}
+		}();
+	});
+var $author$project$Rules$validResourceScanModel = F2(
+	function (model, sectorLocation) {
+		var _v0 = model.aO;
+		if (_v0.$ === 1) {
+			return false;
+		} else {
+			var l = _v0.a;
+			var _v1 = model.a1;
+			if (_v1.$ === 1) {
+				return false;
+			} else {
+				var t = _v1.a;
+				var _v2 = A2($author$project$Data$Sector$getSector, model, sectorLocation);
+				if (_v2.$ === 1) {
+					return false;
+				} else {
+					var s = _v2.a;
+					return A6(
+						$author$project$Rules$validResourceScan,
+						t,
+						$author$project$Data$Effect$activeEffects(model),
+						t.aV.R,
+						s,
+						l,
+						sectorLocation);
+				}
+			}
+		}
+	});
 var $author$project$View$Board$actionButtons = function (model) {
 	var rollButton = _List_fromArray(
 		[
@@ -5110,21 +5640,32 @@ var $author$project$View$Board$actionButtons = function (model) {
 				return rollButton;
 			} else {
 				var t = _v0.a;
-				var _v1 = t.aq;
+				var _v1 = t.as;
 				if (_v1.$ === 3) {
 					return rollButton;
 				} else {
 					var moveDistance = A2(
 						$author$project$Rules$movementDistanceModifier,
 						$author$project$Data$Effect$activeEffects(model),
-						t.aU.aA);
+						t.aV.aB);
 					return _List_fromArray(
 						[
 							A2(
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$author$project$View$Board$buttonStyle,
+									A2(
+									$elm$core$List$any,
+									$elm$core$Basics$identity,
+									$elm$core$Array$toList(
+										$author$project$View$Board$flatten(
+											A2(
+												$author$project$Data$Sector$sectorMap,
+												F2(
+													function (newLocation, _v2) {
+														return A2($author$project$Rules$validMoveModel, model, newLocation);
+													}),
+												model.ak)))) ? $author$project$View$Board$buttonStyle : $author$project$View$Board$buttonInactiveStyle,
 									$elm$html$Html$Events$onClick(
 									$author$project$Types$SelectedAction(
 										$author$project$Types$Move(moveDistance))),
@@ -5141,7 +5682,18 @@ var $author$project$View$Board$actionButtons = function (model) {
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$author$project$View$Board$buttonStyle,
+									A2(
+									$elm$core$List$any,
+									$elm$core$Basics$identity,
+									$elm$core$Array$toList(
+										$author$project$View$Board$flatten(
+											A2(
+												$author$project$Data$Sector$sectorMap,
+												F2(
+													function (newLocation, _v3) {
+														return A2($author$project$Rules$validMapSectorModel, model, newLocation);
+													}),
+												model.ak)))) ? $author$project$View$Board$buttonStyle : $author$project$View$Board$buttonInactiveStyle,
 									$elm$html$Html$Events$onClick(
 									$author$project$Types$SelectedAction($author$project$Types$MapSector)),
 									$elm$html$Html$Events$onMouseEnter(
@@ -5156,7 +5708,18 @@ var $author$project$View$Board$actionButtons = function (model) {
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$author$project$View$Board$buttonStyle,
+									A2(
+									$elm$core$List$any,
+									$elm$core$Basics$identity,
+									$elm$core$Array$toList(
+										$author$project$View$Board$flatten(
+											A2(
+												$author$project$Data$Sector$sectorMap,
+												F2(
+													function (newLocation, _v4) {
+														return A2($author$project$Rules$validResourceScanModel, model, newLocation);
+													}),
+												model.ak)))) ? $author$project$View$Board$buttonStyle : $author$project$View$Board$buttonInactiveStyle,
 									$elm$html$Html$Events$onClick(
 									$author$project$Types$SelectedAction($author$project$Types$ResourceScan)),
 									$elm$html$Html$Events$onMouseEnter(
@@ -5186,7 +5749,7 @@ var $author$project$View$Board$actionHint = function (text) {
 };
 var $author$project$Types$ShipImproved = {$: 2};
 var $author$project$Data$Damage$shipImproved = function (model) {
-	var _v0 = A2($elm$core$List$member, $author$project$Types$ShipImproved, model.aG);
+	var _v0 = A2($elm$core$List$member, $author$project$Types$ShipImproved, model.aH);
 	if (!_v0) {
 		return $elm$core$Basics$identity;
 	} else {
@@ -5197,14 +5760,14 @@ var $author$project$Data$Damage$shipImproved = function (model) {
 };
 var $author$project$Data$Damage$damageAmount = F2(
 	function (model, turnState) {
-		return A2($author$project$Data$Damage$shipImproved, model, turnState.aU.aB);
+		return A2($author$project$Data$Damage$shipImproved, model, turnState.aV.aC);
 	});
 var $author$project$View$Board$anomalyMessage = F2(
 	function (model, t) {
-		var _v0 = t.aU.aC;
+		var _v0 = t.aV.aD;
 		switch (_v0) {
 			case 1:
-				return 'You have encountered a space rift. You must move ' + ($elm$core$String$fromInt(t.aU.aB) + ' spaces.');
+				return 'You have encountered a space rift. You must move ' + ($elm$core$String$fromInt(t.aV.aC) + ' spaces.');
 			case 2:
 				return 'You have encountered an energy surge. Your scanning and mapping ranges will be reduced next turn.';
 			case 3:
@@ -5212,7 +5775,7 @@ var $author$project$View$Board$anomalyMessage = F2(
 					A2($author$project$Data$Damage$damageAmount, model, t)) + ' damage.');
 			case 4:
 				return 'You have encountered a gravitational distortion. Resources within ' + ($elm$core$String$fromInt(
-					A2($elm$core$Basics$max, 1, (t.aU.aA / 2) | 0)) + ' spaces are destroyed.');
+					A2($elm$core$Basics$max, 1, (t.aV.aB / 2) | 0)) + ' spaces are destroyed.');
 			case 5:
 				return 'You have encountered a temporal distortion. The cost of movement will be doubled next turn.';
 			case 6:
@@ -5232,13 +5795,13 @@ var $author$project$Types$D20 = 5;
 var $author$project$Types$D4 = 0;
 var $author$project$Types$D6 = 1;
 var $author$project$Types$D8 = 2;
-var $author$project$View$Board$die = F3(
-	function (style, kind, val) {
+var $author$project$View$Board$numberInformation = F3(
+	function (classes, heading, value) {
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class(style)
+					$elm$html$Html$Attributes$class(classes)
 				]),
 			_List_fromArray(
 				[
@@ -5250,24 +5813,31 @@ var $author$project$View$Board$die = F3(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(kind)
+							$elm$html$Html$text(heading)
 						])),
 					A2(
 					$elm$html$Html$div,
 					_List_Nil,
 					_List_fromArray(
 						[
-							$elm$html$Html$text(
-							function () {
-								if (val.$ === 1) {
-									return '?';
-								} else {
-									var v = val.a;
-									return $elm$core$String$fromInt(v);
-								}
-							}())
+							$elm$html$Html$text(value)
 						]))
 				]));
+	});
+var $author$project$View$Board$die = F3(
+	function (style, kind, val) {
+		return A3(
+			$author$project$View$Board$numberInformation,
+			style,
+			kind,
+			function () {
+				if (val.$ === 1) {
+					return '?';
+				} else {
+					var v = val.a;
+					return $elm$core$String$fromInt(v);
+				}
+			}());
 	});
 var $author$project$View$Board$dieStyle = F2(
 	function (model, d) {
@@ -5278,7 +5848,7 @@ var $author$project$View$Board$dieStyle = F2(
 			return inactiveStyle;
 		} else {
 			var t = _v0.a;
-			var _v1 = model.aK;
+			var _v1 = model.aL;
 			if (_v1.$ === 1) {
 				return activeStyle;
 			} else {
@@ -5368,39 +5938,39 @@ var $author$project$View$Board$dice = function (model) {
 						$author$project$View$Board$die,
 						style(0),
 						'd4',
-						$elm$core$Maybe$Just(t.aU.aA)),
+						$elm$core$Maybe$Just(t.aV.aB)),
 						A3(
 						$author$project$View$Board$die,
 						style(1),
 						'd6',
-						$elm$core$Maybe$Just(t.aU.aB)),
+						$elm$core$Maybe$Just(t.aV.aC)),
 						A3(
 						$author$project$View$Board$die,
 						style(2),
 						'd8',
-						$elm$core$Maybe$Just(t.aU.aC)),
+						$elm$core$Maybe$Just(t.aV.aD)),
 						A3(
 						$author$project$View$Board$die,
 						style(3),
 						'd10',
-						$elm$core$Maybe$Just(t.aU.ax)),
+						$elm$core$Maybe$Just(t.aV.R)),
 						A3(
 						$author$project$View$Board$die,
 						style(4),
 						'd12',
-						$elm$core$Maybe$Just(t.aU.ay)),
+						$elm$core$Maybe$Just(t.aV.az)),
 						A3(
 						$author$project$View$Board$die,
 						style(5),
 						'd20',
-						$elm$core$Maybe$Just(t.aU.az))
+						$elm$core$Maybe$Just(t.aV.aA))
 					]);
 			}
 		}());
 };
 var $author$project$View$Board$activeAction = F2(
 	function (model, t) {
-		var _v0 = t.aq;
+		var _v0 = t.as;
 		switch (_v0.$) {
 			case 4:
 				return _List_fromArray(
@@ -5419,14 +5989,14 @@ var $author$project$View$Board$activeAction = F2(
 				return _List_fromArray(
 					[
 						$author$project$View$Board$actionHint(
-						'Select a sector to map within ' + ($elm$core$String$fromInt(t.aU.ax) + ' spaces.')),
+						'Select a sector to map within ' + ($elm$core$String$fromInt(t.aV.R) + ' spaces.')),
 						A2($elm$html$Html$div, _List_Nil, _List_Nil)
 					]);
 			case 2:
 				return _List_fromArray(
 					[
 						$author$project$View$Board$actionHint(
-						'Select a sector to scan for resources within ' + ($elm$core$String$fromInt(t.aU.ax) + ' spaces.')),
+						'Select a sector to scan for resources within ' + ($elm$core$String$fromInt(t.aV.R) + ' spaces.')),
 						A2($elm$html$Html$div, _List_Nil, _List_Nil)
 					]);
 			default:
@@ -5447,90 +6017,8 @@ var $author$project$View$Board$activeAction = F2(
 					]);
 		}
 	});
-var $elm$core$Elm$JsArray$foldl = _JsArray_foldl;
-var $elm$core$Array$foldl = F3(
-	function (func, baseCase, _v0) {
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (!node.$) {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
-				}
-			});
-		return A3(
-			$elm$core$Elm$JsArray$foldl,
-			func,
-			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
-			tail);
-	});
-var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
-var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
-var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var $elm$core$Array$tailIndex = function (len) {
-	return (len >>> 5) << 5;
-};
-var $elm$core$Array$indexedMap = F2(
-	function (func, _v0) {
-		var len = _v0.a;
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var initialBuilder = {
-			d: _List_Nil,
-			a: 0,
-			c: A3(
-				$elm$core$Elm$JsArray$indexedMap,
-				func,
-				$elm$core$Array$tailIndex(len),
-				tail)
-		};
-		var helper = F2(
-			function (node, builder) {
-				if (!node.$) {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, helper, builder, subTree);
-				} else {
-					var leaf = node.a;
-					var offset = builder.a * $elm$core$Array$branchFactor;
-					var mappedLeaf = $elm$core$Array$Leaf(
-						A3($elm$core$Elm$JsArray$indexedMap, func, offset, leaf));
-					return {
-						d: A2($elm$core$List$cons, mappedLeaf, builder.d),
-						a: builder.a + 1,
-						c: builder.c
-					};
-				}
-			});
-		return A2(
-			$elm$core$Array$builderToArray,
-			true,
-			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
-	});
-var $author$project$Data$Sector$sectorMap = F2(
-	function (fn, sectors) {
-		return A2(
-			$elm$core$Array$indexedMap,
-			F2(
-				function (rowNum, row) {
-					return A2(
-						$elm$core$Array$indexedMap,
-						F2(
-							function (colNum, sector) {
-								return A2(
-									fn,
-									{P: colNum, ah: rowNum},
-									sector);
-							}),
-						row);
-				}),
-			sectors);
-	});
 var $author$project$View$Board$calcScore = function (model) {
-	return ((((model.F.at + model.F.a_) + model.F.aX) + model.F.aV) + ($elm$core$List$length(model.aG) * 10)) + A3(
+	return ((((model.F.av + model.F.a_) + model.F.aX) + model.F.aW) + ($elm$core$List$length(model.aH) * 10)) + A3(
 		$elm$core$Array$foldl,
 		F2(
 			function (row, total) {
@@ -5547,14 +6035,14 @@ var $author$project$View$Board$calcScore = function (model) {
 						return 1;
 					}
 				}),
-			model.aW));
+			model.ak));
 };
 var $author$project$Types$BlinkDrive = 0;
 var $author$project$Types$ScannerTech = 3;
 var $author$project$Types$ShipRepairs = 2;
 var $author$project$Types$TerraformingTech = 1;
 var $author$project$Types$ResourceCollected = function (a) {
-	return {$: 7, a: a};
+	return {$: 8, a: a};
 };
 var $author$project$Data$Upgrade$upgradeToName = function (upgrade) {
 	switch (upgrade) {
@@ -5577,7 +6065,7 @@ var $author$project$View$Board$collectResourceButton = F3(
 					$author$project$View$Board$buttonStyle,
 					$elm$html$Html$Events$onClick(
 					$author$project$Types$ResourceCollected(
-						{ar: applyTo, aE: r, aN: l}))
+						{at: applyTo, aF: r, aO: l}))
 				]),
 			_List_fromArray(
 				[
@@ -5598,7 +6086,7 @@ var $author$project$View$Board$collectResourceButtons = F2(
 					$elm$html$Html$Attributes$class('flex justify-around items-center text-center w-full h-[3rem]')
 				]),
 			function () {
-				var _v0 = r.G;
+				var _v0 = r.H;
 				switch (_v0) {
 					case 0:
 						return _List_Nil;
@@ -5623,55 +6111,18 @@ var $author$project$View$Board$collectResourceButtons = F2(
 				}
 			}());
 	});
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
-var $elm$core$Basics$ge = _Utils_ge;
-var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
-var $elm$core$Array$getHelp = F3(
-	function (shift, index, tree) {
-		getHelp:
-		while (true) {
-			var pos = $elm$core$Array$bitMask & (index >>> shift);
-			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (!_v0.$) {
-				var subTree = _v0.a;
-				var $temp$shift = shift - $elm$core$Array$shiftStep,
-					$temp$index = index,
-					$temp$tree = subTree;
-				shift = $temp$shift;
-				index = $temp$index;
-				tree = $temp$tree;
-				continue getHelp;
-			} else {
-				var values = _v0.a;
-				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
-			}
-		}
-	});
-var $elm$core$Array$get = F2(
-	function (index, _v0) {
-		var len = _v0.a;
-		var startShift = _v0.b;
-		var tree = _v0.c;
-		var tail = _v0.d;
-		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
-			index,
-			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
-			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
-			A3($elm$core$Array$getHelp, startShift, index, tree)));
-	});
 var $author$project$Data$Sector$getCurrentSector = function (model) {
-	var _v0 = model.aN;
+	var _v0 = model.aO;
 	if (_v0.$ === 1) {
 		return $elm$core$Maybe$Nothing;
 	} else {
 		var l = _v0.a;
-		var _v1 = A2($elm$core$Array$get, l.ah, model.aW);
+		var _v1 = A2($elm$core$Array$get, l.L, model.ak);
 		if (_v1.$ === 1) {
 			return $elm$core$Maybe$Nothing;
 		} else {
 			var row = _v1.a;
-			var _v2 = A2($elm$core$Array$get, l.P, row);
+			var _v2 = A2($elm$core$Array$get, l.G, row);
 			if (_v2.$ === 1) {
 				return $elm$core$Maybe$Nothing;
 			} else {
@@ -5689,36 +6140,31 @@ var $author$project$Data$Sector$getCurrentSector = function (model) {
 var $author$project$Types$maxTurns = 30;
 var $author$project$View$Board$actionArea = function (model) {
 	var handleTurnState = function () {
-		var _v4 = model.a1;
-		if (!_v4.$) {
-			var t = _v4.a;
+		var _v5 = model.a1;
+		if (!_v5.$) {
+			var t = _v5.a;
 			return A2($author$project$View$Board$activeAction, model, t);
 		} else {
-			var _v5 = _Utils_cmp(model.a0, $author$project$Types$maxTurns) > 0;
-			if (_v5) {
-				return _List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('flex flex-col items-center justify-center')
-							]),
-						_List_fromArray(
-							[
-								$author$project$View$Board$actionHint('Game Over!'),
-								$author$project$View$Board$actionHint(
-								'Score: ' + $elm$core$String$fromInt(
-									$author$project$View$Board$calcScore(model)))
-							]))
-					]);
-			} else {
-				return _List_fromArray(
-					[
-						$author$project$View$Board$dice(model),
-						$author$project$View$Board$actionButtons(model)
-					]);
-			}
+			return (_Utils_cmp(model.a0, $author$project$Types$maxTurns) > 0) ? _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('flex flex-col items-center justify-center')
+						]),
+					_List_fromArray(
+						[
+							$author$project$View$Board$actionHint('Game Over!'),
+							$author$project$View$Board$actionHint(
+							'Score: ' + $elm$core$String$fromInt(
+								$author$project$View$Board$calcScore(model)))
+						]))
+				]) : _List_fromArray(
+				[
+					$author$project$View$Board$dice(model),
+					$author$project$View$Board$actionButtons(model)
+				]);
 		}
 	}();
 	return A2(
@@ -5728,7 +6174,7 @@ var $author$project$View$Board$actionArea = function (model) {
 				$elm$html$Html$Attributes$class('flex flex-col h-[9rem] justify-center')
 			]),
 		function () {
-			var _v0 = model.aN;
+			var _v0 = model.aO;
 			if (_v0.$ === 1) {
 				return _List_fromArray(
 					[
@@ -5750,20 +6196,25 @@ var $author$project$View$Board$actionArea = function (model) {
 					return handleTurnState;
 				} else {
 					var s = _v1.a;
-					var _v2 = s.aS;
+					var _v2 = s.aT;
 					if (_v2.$ === 1) {
 						return handleTurnState;
 					} else {
 						var r = _v2.a;
-						var _v3 = r.aw;
+						var _v3 = r.ay;
 						if (!_v3) {
 							return handleTurnState;
 						} else {
-							return _List_fromArray(
-								[
-									$author$project$View$Board$actionHint('Select an upgrade to spend these resources on.'),
-									A2($author$project$View$Board$collectResourceButtons, l, r)
-								]);
+							var _v4 = r.H;
+							if (!_v4) {
+								return handleTurnState;
+							} else {
+								return _List_fromArray(
+									[
+										$author$project$View$Board$actionHint('Select an upgrade to spend these resources on.'),
+										A2($author$project$View$Board$collectResourceButtons, l, r)
+									]);
+							}
 						}
 					}
 				}
@@ -5783,6 +6234,21 @@ var $author$project$View$Board$header = A2(
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $author$project$Types$SectorClicked = function (a) {
 	return {$: 0, a: a};
+};
+var $author$project$Update$Resource$getResource = function (model) {
+	var _v0 = $author$project$Data$Sector$getCurrentSector(model);
+	if (_v0.$ === 1) {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		var sd = _v0.a;
+		var _v1 = sd.aT;
+		if (_v1.$ === 1) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var rd = _v1.a;
+			return $elm$core$Maybe$Just(rd);
+		}
+	}
 };
 var $author$project$Data$Resource$resourceKindToName = function (rk) {
 	switch (rk) {
@@ -5858,17 +6324,12 @@ var $author$project$View$Map$sectorRowStyle = function (s) {
 };
 var $author$project$View$Map$sectorStyleCurrentLocation = F3(
 	function (model, col, row) {
-		var _v0 = model.aN;
+		var _v0 = model.aO;
 		if (_v0.$ === 1) {
 			return '';
 		} else {
 			var l = _v0.a;
-			var _v1 = _Utils_eq(l.P, col) && _Utils_eq(l.ah, row);
-			if (_v1) {
-				return 'bg-sky-100';
-			} else {
-				return '';
-			}
+			return (_Utils_eq(l.G, col) && _Utils_eq(l.L, row)) ? 'bg-sky-100' : '';
 		}
 	});
 var $author$project$View$Map$sectorStyleMapped = F2(
@@ -5879,176 +6340,17 @@ var $author$project$View$Map$sectorStyleMapped = F2(
 			return 'divide-gray-500 hover:font-medium';
 		}
 	});
-var $author$project$Types$ScanningImpaired = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$core$Basics$not = _Basics_not;
-var $author$project$Rules$canScan = function (effects) {
-	return !A2(
-		$elm$core$List$member,
-		$author$project$Types$ScanningImpaired(
-			{E: true}),
-		effects);
-};
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var $author$project$Rules$gameDistance = F2(
-	function (a, b) {
-		return $elm$core$Basics$abs(a.ah - b.ah) + $elm$core$Basics$abs(a.P - b.P);
-	});
-var $author$project$Rules$scanningDistanceModifier = F2(
-	function (effects, distance) {
-		var getDistanceModifierFn = function (eff) {
-			var _v0 = A2($elm$core$List$member, eff, effects);
-			if (!_v0) {
-				return $elm$core$Basics$identity;
-			} else {
-				if (!eff.$) {
-					var details = eff.a;
-					var _v2 = details.E;
-					if (!_v2) {
-						return function (d) {
-							return d + 2;
-						};
-					} else {
-						return function (d) {
-							return 0;
-						};
-					}
-				} else {
-					return $elm$core$Basics$identity;
-				}
-			}
-		};
-		return A4(
-			$elm$core$List$foldl,
-			F2(
-				function (eff, fn) {
-					return A2(
-						$elm$core$Basics$composeR,
-						fn,
-						getDistanceModifierFn(eff));
-				}),
-			$elm$core$Basics$identity,
-			_List_fromArray(
-				[
-					$author$project$Types$ScanningImpaired(
-					{E: false}),
-					$author$project$Types$ScanningImpaired(
-					{E: true})
-				]),
-			distance);
-	});
-var $author$project$Rules$validScanCommon = F5(
-	function (effects, range, sector, curLocation, sectorLocation) {
-		return $author$project$Rules$canScan(effects) && (_Utils_cmp(
-			A2(
-				$author$project$Rules$scanningDistanceModifier,
-				effects,
-				A2($author$project$Rules$gameDistance, curLocation, sectorLocation)),
-			range) < 1);
-	});
-var $author$project$Rules$validMapSector = F5(
-	function (effects, range, sector, curLocation, sectorLocation) {
-		return A5($author$project$Rules$validScanCommon, effects, range, sector, curLocation, sectorLocation) && function () {
-			if (!sector.$) {
-				return false;
-			} else {
-				return true;
-			}
-		}();
-	});
 var $author$project$Rules$validMove = F3(
 	function (movesLeft, curLocation, newLocation) {
 		return (movesLeft > 0) && (A2($author$project$Rules$gameDistance, curLocation, newLocation) === 1);
-	});
-var $author$project$Rules$validMoveHover = F3(
-	function (movesLeft, curLocation, newLocation) {
-		return (movesLeft > 0) && (_Utils_cmp(
-			A2($author$project$Rules$gameDistance, curLocation, newLocation),
-			movesLeft) < 1);
-	});
-var $author$project$Types$DarkMatter = 5;
-var $author$project$Types$ExoticMinerals = 6;
-var $author$project$Types$MetalAlloys = 3;
-var $author$project$Types$None = 0;
-var $author$project$Types$RawMetals = 2;
-var $author$project$Types$Silicon = 4;
-var $author$project$Types$Water = 1;
-var $author$project$Data$Resource$intToResourceKind = function (i) {
-	switch (i) {
-		case 2:
-			return 1;
-		case 3:
-			return 2;
-		case 4:
-			return 3;
-		case 5:
-			return 4;
-		case 6:
-			return 5;
-		case 7:
-			return 6;
-		default:
-			return 0;
-	}
-};
-var $author$project$Rules$validResourceScan = F6(
-	function (turnState, effects, range, sector, curLocation, sectorLocation) {
-		return A5($author$project$Rules$validScanCommon, effects, range, sector, curLocation, sectorLocation) && function () {
-			if (sector.$ === 1) {
-				return false;
-			} else {
-				var s = sector.a;
-				return true && function () {
-					var _v1 = s.aS;
-					if (!_v1.$) {
-						return false;
-					} else {
-						return true && function () {
-							var _v2 = $author$project$Data$Resource$intToResourceKind(turnState.aU.aC);
-							switch (_v2) {
-								case 1:
-									var _v3 = s.G;
-									if (!_v3) {
-										return false;
-									} else {
-										return true;
-									}
-								case 5:
-									var _v4 = s.G;
-									if (_v4 === 1) {
-										return false;
-									} else {
-										return true;
-									}
-								case 6:
-									var _v5 = s.G;
-									if (_v5 === 1) {
-										return false;
-									} else {
-										return true;
-									}
-								default:
-									return true;
-							}
-						}();
-					}
-				}();
-			}
-		}();
 	});
 var $author$project$View$Map$sectorStyleValidForAction = F4(
 	function (model, col, row, s) {
 		var validStyle = '!bg-gray-200';
 		var invalidStyle = '';
 		var effects = $author$project$Data$Effect$activeEffects(model);
-		var coords = {P: col, ah: row};
-		var _v0 = model.aN;
+		var coords = {G: col, L: row};
+		var _v0 = model.aO;
 		if (_v0.$ === 1) {
 			return validStyle;
 		} else {
@@ -6058,60 +6360,45 @@ var $author$project$View$Map$sectorStyleValidForAction = F4(
 				return invalidStyle;
 			} else {
 				var t = _v1.a;
-				var _v2 = model.aK;
+				var _v2 = model.aL;
 				if (!_v2.$) {
 					var ha = _v2.a;
 					switch (ha.$) {
 						case 0:
 							var ml = ha.a;
-							var _v4 = A3($author$project$Rules$validMoveHover, ml, l, coords);
-							if (_v4) {
-								return validStyle;
-							} else {
-								return invalidStyle;
-							}
+							return A3($author$project$Rules$validMoveHover, ml, l, coords) ? validStyle : invalidStyle;
 						case 1:
-							var _v5 = A5($author$project$Rules$validMapSector, effects, t.aU.ax, s, l, coords);
-							if (_v5) {
-								return validStyle;
-							} else {
-								return invalidStyle;
-							}
+							return A5($author$project$Rules$validMapSector, effects, t.aV.R, s, l, coords) ? validStyle : invalidStyle;
 						case 2:
-							var _v6 = A6($author$project$Rules$validResourceScan, t, effects, t.aU.ax, s, l, coords);
-							if (_v6) {
-								return validStyle;
-							} else {
-								return invalidStyle;
-							}
+							return A6($author$project$Rules$validResourceScan, t, effects, t.aV.R, s, l, coords) ? validStyle : invalidStyle;
 						default:
 							return invalidStyle;
 					}
 				} else {
-					var _v7 = t.aq;
-					if (_v7.$ === 4) {
+					var _v4 = t.as;
+					if (_v4.$ === 4) {
 						return invalidStyle;
 					} else {
-						var a = _v7;
+						var a = _v4;
 						switch (a.$) {
 							case 0:
 								var ml = a.a;
-								var _v9 = A3($author$project$Rules$validMove, ml, l, coords);
-								if (_v9) {
+								var _v6 = A3($author$project$Rules$validMove, ml, l, coords);
+								if (_v6) {
 									return validStyle;
 								} else {
 									return invalidStyle;
 								}
 							case 1:
-								var _v10 = A5($author$project$Rules$validMapSector, effects, t.aU.ax, s, l, coords);
-								if (_v10) {
+								var _v7 = A5($author$project$Rules$validMapSector, effects, t.aV.R, s, l, coords);
+								if (_v7) {
 									return validStyle;
 								} else {
 									return invalidStyle;
 								}
 							case 2:
-								var _v11 = A6($author$project$Rules$validResourceScan, t, effects, t.aU.ax, s, l, coords);
-								if (_v11) {
+								var _v8 = A6($author$project$Rules$validResourceScan, t, effects, t.aV.R, s, l, coords);
+								if (_v8) {
 									return validStyle;
 								} else {
 									return invalidStyle;
@@ -6140,15 +6427,39 @@ var $author$project$View$Map$sectorStyle = F4(
 var $elm$html$Html$Attributes$title = $elm$html$Html$Attributes$stringProperty('title');
 var $author$project$View$Map$sector = F4(
 	function (model, row, col, data) {
-		var sectorRowStyleResolved = $author$project$View$Map$sectorRowStyle(data);
-		var sectorAttributes = _List_fromArray(
+		var sectorUnclickable = _List_fromArray(
 			[
 				$elm$html$Html$Attributes$class(
-				A4($author$project$View$Map$sectorStyle, model, col, row, data)),
-				$elm$html$Html$Events$onClick(
-				$author$project$Types$SectorClicked(
-					{P: col, ah: row}))
+				A4($author$project$View$Map$sectorStyle, model, col, row, data))
 			]);
+		var sectorRowStyleResolved = $author$project$View$Map$sectorRowStyle(data);
+		var sectorClickable = _Utils_ap(
+			sectorUnclickable,
+			_List_fromArray(
+				[
+					$elm$html$Html$Events$onClick(
+					$author$project$Types$SectorClicked(
+						{G: col, L: row}))
+				]));
+		var sectorAttributes = function () {
+			var _v3 = $author$project$Update$Resource$getResource(model);
+			if (_v3.$ === 1) {
+				return sectorClickable;
+			} else {
+				var rd = _v3.a;
+				var _v4 = _Utils_Tuple2(rd.H, rd.ay > 0);
+				if (!_v4.a) {
+					var _v5 = _v4.a;
+					return sectorClickable;
+				} else {
+					if (_v4.b) {
+						return sectorUnclickable;
+					} else {
+						return sectorClickable;
+					}
+				}
+			}
+		}();
 		if (data.$ === 1) {
 			return A2(
 				$elm$html$Html$div,
@@ -6230,16 +6541,16 @@ var $author$project$View$Map$sector = F4(
 									[
 										$elm$html$Html$Attributes$class($author$project$View$Map$sectorBoxStyle),
 										$elm$html$Html$Attributes$title(
-										$author$project$Data$Sector$sectorKindToName(d.G))
+										$author$project$Data$Sector$sectorKindToName(d.H))
 									]),
 								_List_fromArray(
 									[
 										$elm$html$Html$text(
-										$author$project$Data$Sector$sectorKindToSymbol(d.G))
+										$author$project$Data$Sector$sectorKindToSymbol(d.H))
 									]))
 							])),
 						function () {
-						var _v1 = d.aS;
+						var _v1 = d.aT;
 						if (_v1.$ === 1) {
 							return A2(
 								$elm$html$Html$div,
@@ -6283,7 +6594,14 @@ var $author$project$View$Map$sector = F4(
 										_List_fromArray(
 											[
 												$elm$html$Html$text(
-												$elm$core$String$fromInt(rd.aw))
+												function () {
+													var _v2 = rd.H;
+													if (!_v2) {
+														return '—';
+													} else {
+														return $elm$core$String$fromInt(rd.ay);
+													}
+												}())
 											])),
 										A2(
 										$elm$html$Html$div,
@@ -6291,12 +6609,12 @@ var $author$project$View$Map$sector = F4(
 											[
 												$elm$html$Html$Attributes$class($author$project$View$Map$sectorBoxStyle),
 												$elm$html$Html$Attributes$title(
-												$author$project$Data$Resource$resourceKindToName(rd.G))
+												$author$project$Data$Resource$resourceKindToName(rd.H))
 											]),
 										_List_fromArray(
 											[
 												$elm$html$Html$text(
-												$author$project$Data$Resource$resourceKindToSymbol(rd.G))
+												$author$project$Data$Resource$resourceKindToSymbol(rd.H))
 											]))
 									]));
 						}
@@ -6330,36 +6648,394 @@ var $author$project$View$Map$map = function (model) {
 			A2(
 				$elm$core$Array$indexedMap,
 				$author$project$View$Map$mapRow(model),
-				model.aW)));
+				model.ak)));
 };
-var $author$project$View$Board$intToTallyMarks = function (i) {
-	switch (i) {
+var $author$project$Types$Formatted = function (a) {
+	return {$: 1, a: a};
+};
+var $author$project$Types$Simple = function (a) {
+	return {$: 0, a: a};
+};
+var $author$project$Data$Die$dieToString = function (die) {
+	switch (die) {
 		case 0:
-			return '';
+			return 'd4';
 		case 1:
-			return '𝍩';
+			return 'd6';
 		case 2:
-			return '𝍪';
+			return 'd8';
 		case 3:
-			return '𝍫';
+			return 'd10';
 		case 4:
-			return '𝍬';
-		case 5:
-			return '𝍸';
+			return 'd12';
 		default:
-			return '𝍸 ' + $author$project$View$Board$intToTallyMarks(i - 5);
+			return 'd20';
 	}
 };
-var $author$project$View$Board$upgradeTrackingArea = function (model) {
-	var tallyStyle = 'text-2xl';
-	var rowStyle = 'flex flex-row justify-around h-[4rem]';
-	var headerStyle = 'flex size-fit justify-center border-b-1 border-black/50';
+var $author$project$View$Rules$dieUseTableRow = F4(
+	function (bottomBorder, die, name, meaning) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class(
+					bottomBorder ? 'flex-row flex border-b-1 border-black/35 w-full' : 'flex-row flex w-full')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('p-1 pr-2 border-r-1 border-black/35 w-[2.5rem] text-right')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(
+							$author$project$Data$Die$dieToString(die))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('p-1 text-center w-[8rem]')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(name)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('p-1 border-l-1 border-black/35 pl-2 w-[40rem]')
+						]),
+					function () {
+						if (!meaning.$) {
+							var s = meaning.a;
+							return _List_fromArray(
+								[
+									$elm$html$Html$text(s)
+								]);
+						} else {
+							var h = meaning.a;
+							return h;
+						}
+					}())
+				]));
+	});
+var $author$project$View$Rules$dieUseTableRows = function (useMeanings) {
+	if (useMeanings.b) {
+		if (!useMeanings.b.b) {
+			var _v1 = useMeanings.a;
+			var die = _v1.a;
+			var name = _v1.b;
+			var meaning = _v1.c;
+			return _List_fromArray(
+				[
+					A4($author$project$View$Rules$dieUseTableRow, false, die, name, meaning)
+				]);
+		} else {
+			var _v2 = useMeanings.a;
+			var die = _v2.a;
+			var name = _v2.b;
+			var meaning = _v2.c;
+			var rest = useMeanings.b;
+			return A2(
+				$elm$core$List$cons,
+				A4($author$project$View$Rules$dieUseTableRow, true, die, name, meaning),
+				$author$project$View$Rules$dieUseTableRows(rest));
+		}
+	} else {
+		return _List_Nil;
+	}
+};
+var $author$project$View$Rules$dieUseTable = function (useMeanings) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('flex flex-col mt-2')
+			]),
+		$author$project$View$Rules$dieUseTableRows(useMeanings));
+};
+var $author$project$View$Rules$dieValueTableRow = F3(
+	function (bottomBorder, number, meaning) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class(
+					bottomBorder ? 'flex border-b-1 border-black/25' : 'flex')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('w-1/4 text-right p-1 pr-2 border-r-1 border-black/25')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(
+							$elm$core$String$fromInt(number))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('w-3/4 p-1 pl-2')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(meaning)
+						]))
+				]));
+	});
+var $author$project$View$Rules$dieValueTableRows = function (valueMeanings) {
+	if (valueMeanings.b) {
+		if (!valueMeanings.b.b) {
+			var _v1 = valueMeanings.a;
+			var num = _v1.a;
+			var str = _v1.b;
+			return _List_fromArray(
+				[
+					A3($author$project$View$Rules$dieValueTableRow, false, num, str)
+				]);
+		} else {
+			var _v2 = valueMeanings.a;
+			var num = _v2.a;
+			var str = _v2.b;
+			var rest = valueMeanings.b;
+			return A2(
+				$elm$core$List$cons,
+				A3($author$project$View$Rules$dieValueTableRow, true, num, str),
+				$author$project$View$Rules$dieValueTableRows(rest));
+		}
+	} else {
+		return _List_Nil;
+	}
+};
+var $author$project$View$Rules$dieValueTable = function (valueMeanings) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('my-2 px-1')
+			]),
+		$author$project$View$Rules$dieValueTableRows(valueMeanings));
+};
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
+var $elm$core$String$toLower = _String_toLower;
+var $author$project$View$Rules$rulesSection = F2(
+	function (title, children) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$id(
+					A3(
+						$elm$core$String$replace,
+						' ',
+						'-',
+						$elm$core$String$toLower(title))),
+					$elm$html$Html$Attributes$class('flex flex-col items-center my-2')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('font-medium flex items-start w-full border-b-1 border-black/50')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(title)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('mt-1 px-[1rem] w-full font-light')
+						]),
+					children)
+				]));
+	});
+var $author$project$View$Rules$mapping = function (model) {
+	var ruleText = '\n            You must map a sector before you\'re able to scan it for resources. Choose one sector within the range determined by the scan range and mark it as having the sector type.\n            ';
+	return A2(
+		$author$project$View$Rules$rulesSection,
+		'Mapping',
+		_List_fromArray(
+			[
+				$elm$html$Html$text(ruleText),
+				$author$project$View$Rules$dieUseTable(
+				_List_fromArray(
+					[
+						_Utils_Tuple3(
+						3,
+						'Scan Range',
+						$author$project$Types$Simple('Determines how far the mapping scan reaches.')),
+						_Utils_Tuple3(
+						1,
+						'Sector Type',
+						$author$project$Types$Formatted(
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Determines the type of sector that is mapped.'),
+									$author$project$View$Rules$dieValueTable(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(1, 'Deep Space'),
+											_Utils_Tuple2(2, 'Colonized Star System'),
+											_Utils_Tuple2(3, 'Uncolonized Star System'),
+											_Utils_Tuple2(4, 'Nebula (Requires 2 movement points to exit)'),
+											_Utils_Tuple2(5, 'Enemy Space (Suffer 2 damage to enter)'),
+											_Utils_Tuple2(6, 'Deep Space')
+										]))
+								])))
+					]))
+			]));
+};
+var $author$project$View$Rules$movement = function (model) {
+	return A2(
+		$author$project$View$Rules$rulesSection,
+		'Movement',
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('flex flex-row')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('When you pass through a sector you can collect the resources in it. Entering a sector'),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('font-medium mx-[0.20rem]')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('does not')
+							])),
+						$elm$html$Html$text('map it.')
+					])),
+				$author$project$View$Rules$dieUseTable(
+				_List_fromArray(
+					[
+						_Utils_Tuple3(
+						0,
+						'Warp Drive',
+						$author$project$Types$Simple('Determines the maximum number of sectors a player can move.'))
+					]))
+			]));
+};
+var $author$project$View$Rules$resourceDiscovery = function (model) {
+	var ruleText = '\n             Once a sector has been discovered it can be scanned for resources which can be collected by moving to that sector. You can scan the sector you\'re occupying.\n            ';
+	return A2(
+		$author$project$View$Rules$rulesSection,
+		'Resource Discovery',
+		_List_fromArray(
+			[
+				$elm$html$Html$text(ruleText),
+				$author$project$View$Rules$dieUseTable(
+				_List_fromArray(
+					[
+						_Utils_Tuple3(
+						3,
+						'Scan Range',
+						$author$project$Types$Simple('Determines how far the resource scan reaches.')),
+						_Utils_Tuple3(
+						4,
+						'Resource Quantity',
+						$author$project$Types$Simple('Determines the amount of the resource discovered.')),
+						_Utils_Tuple3(
+						2,
+						'Resource Type',
+						$author$project$Types$Formatted(
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Determines the type of resource discovered.'),
+									$author$project$View$Rules$dieValueTable(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(1, 'Nothing'),
+											_Utils_Tuple2(2, 'Water (never found in Deep Space)'),
+											_Utils_Tuple2(3, 'Raw Metals'),
+											_Utils_Tuple2(4, 'Metal Alloys'),
+											_Utils_Tuple2(5, 'Silicon'),
+											_Utils_Tuple2(6, 'Dark Matter (never found in a Colonized System)'),
+											_Utils_Tuple2(7, 'Exotic Minerals (never found in a Colonized System)'),
+											_Utils_Tuple2(8, 'Nothing')
+										]))
+								])))
+					]))
+			]));
+};
+var $author$project$View$Rules$actions = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('action-rules')
+			]),
+		_List_fromArray(
+			[
+				$author$project$View$Rules$movement(model),
+				$author$project$View$Rules$mapping(model),
+				$author$project$View$Rules$resourceDiscovery(model)
+			]));
+};
+var $author$project$View$Rules$rules = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('rules'),
+				$elm$html$Html$Attributes$class('flex flex-row justify-start mb-8 w-full p-2 overflow-y-auto')
+			]),
+		_List_fromArray(
+			[
+				$author$project$View$Rules$actions(model),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('upgrades-rules')
+					]),
+				_List_Nil),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('anomaly-rules')
+					]),
+				_List_Nil)
+			]));
+};
+var $author$project$View$Board$trackingArea = function (model) {
+	var tallyStyle = 'font-medium';
+	var rowStyle = 'flex flex-row justify-around items-center h-[4rem] mx-4';
+	var headerStyle = 'flex size-fit justify-center border-b-1 border-black/50 font-light';
 	var cellStyle = 'flex flex-col w-1/3 items-center';
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('flex flex-col my-2')
+				$elm$html$Html$Attributes$class('flex flex-col my-2 w-full 2xl:max-w-full'),
+				$elm$html$Html$Attributes$id('tracking-container')
 			]),
 		_List_fromArray(
 			[
@@ -6371,66 +7047,17 @@ var $author$project$View$Board$upgradeTrackingArea = function (model) {
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class(cellStyle)
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(headerStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Blink Drive')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(tallyStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$View$Board$intToTallyMarks(model.F.at))
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class(cellStyle)
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(headerStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Terraforming Tech')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(tallyStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$View$Board$intToTallyMarks(model.F.a_))
-									]))
-							]))
+						A3(
+						$author$project$View$Board$numberInformation,
+						cellStyle,
+						'Score',
+						$elm$core$String$fromInt(
+							$author$project$View$Board$calcScore(model))),
+						A3(
+						$author$project$View$Board$numberInformation,
+						cellStyle,
+						'Damage',
+						$elm$core$String$fromInt(model.aE))
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -6440,66 +7067,35 @@ var $author$project$View$Board$upgradeTrackingArea = function (model) {
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class(cellStyle)
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(headerStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Ship Repairs')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(tallyStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$View$Board$intToTallyMarks(model.F.aX))
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class(cellStyle)
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(headerStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Scanner Tech')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class(tallyStyle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$View$Board$intToTallyMarks(model.F.aV))
-									]))
-							]))
+						A3(
+						$author$project$View$Board$numberInformation,
+						cellStyle,
+						'Blink Drive',
+						$elm$core$String$fromInt(model.F.av)),
+						A3(
+						$author$project$View$Board$numberInformation,
+						cellStyle,
+						'Terraforming Tech',
+						$elm$core$String$fromInt(model.F.a_))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class(rowStyle)
+					]),
+				_List_fromArray(
+					[
+						A3(
+						$author$project$View$Board$numberInformation,
+						cellStyle,
+						'Ship Repairs',
+						$elm$core$String$fromInt(model.F.aX)),
+						A3(
+						$author$project$View$Board$numberInformation,
+						cellStyle,
+						'Scanner Tech',
+						$elm$core$String$fromInt(model.F.aW))
 					]))
 			]));
 };
@@ -6508,39 +7104,68 @@ var $author$project$View$Board$board = function (model) {
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('font-[\'Exo_2\'] flex justify-center items-center')
+				$elm$html$Html$Attributes$class('font-[\'Exo_2\'] flex flex-col justify-center items-center w-full')
 			]),
 		_List_fromArray(
 			[
+				$author$project$View$Board$header,
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$id('board'),
-						$elm$html$Html$Attributes$class('flex flex-col size-fit p-4')
+						$elm$html$Html$Attributes$class('flex flex-col 2xl:flex-row w-full items-center 2xl:justify-center 2xl:items-start')
 					]),
 				_List_fromArray(
 					[
-						$author$project$View$Board$header,
-						$author$project$View$Board$actionArea(model),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('flex flex-col w-full items-center')
+								$elm$html$Html$Attributes$class('flex')
 							]),
 						_List_fromArray(
 							[
-								$author$project$View$Map$map(model),
 								A2(
 								$elm$html$Html$div,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$class('flex flex-col w-full')
+										$elm$html$Html$Attributes$id('board'),
+										$elm$html$Html$Attributes$class('flex flex-col size-fit p-4')
 									]),
 								_List_fromArray(
 									[
-										$author$project$View$Board$upgradeTrackingArea(model)
+										$author$project$View$Board$actionArea(model),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('flex flex-col w-full items-center')
+											]),
+										_List_fromArray(
+											[
+												$author$project$View$Map$map(model)
+											]))
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('flex w-2/3 justify-center 2xl:w-5/12'),
+								$elm$html$Html$Attributes$id('subboard')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('flex w-full flex-col items-center 2xl:items-start 2xl:h-screen')
+									]),
+								_List_fromArray(
+									[
+										$author$project$View$Board$trackingArea(model),
+										$author$project$View$Rules$rules(model)
 									]))
 							]))
 					]))
@@ -6557,7 +7182,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {T: fragment, V: host, Z: path, aa: port_, ad: protocol, ae: query};
+		return {V: fragment, X: host, aa: path, ac: port_, af: protocol, ag: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -6852,12 +7477,12 @@ var $author$project$Main$initialSectors = A2(
 	$elm$core$Array$repeat,
 	$author$project$Types$maxSectorCol,
 	A2($elm$core$Array$repeat, $author$project$Types$maxSectorRow, $author$project$Types$Unmapped));
-var $author$project$Main$initialUpgrades = {at: 0, aV: 0, aX: 0, a_: 0};
+var $author$project$Main$initialUpgrades = {av: 0, aW: 0, aX: 0, a_: 0};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{aD: 0, aG: _List_Nil, aK: $elm$core$Maybe$Nothing, aN: $elm$core$Maybe$Nothing, aW: $author$project$Main$initialSectors, aZ: $elm$core$Maybe$Nothing, a0: 0, a1: $elm$core$Maybe$Nothing, F: $author$project$Main$initialUpgrades},
+		{aE: 0, aH: _List_Nil, aL: $elm$core$Maybe$Nothing, aO: $elm$core$Maybe$Nothing, ak: $author$project$Main$initialSectors, aZ: $elm$core$Maybe$Nothing, a0: 0, a1: $elm$core$Maybe$Nothing, F: $author$project$Main$initialUpgrades},
 		$elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -6867,6 +7492,9 @@ var $author$project$Main$subscriptions = function (_v0) {
 };
 var $author$project$Types$Anomaly = {$: 3};
 var $author$project$Types$NoAction = {$: 4};
+var $author$project$Types$Rolled = function (a) {
+	return {$: 2, a: a};
+};
 var $author$project$Update$clearTemporaryEffect = function (model) {
 	return _Utils_update(
 		model,
@@ -6877,7 +7505,7 @@ var $author$project$Update$clearTemporaryEffect = function (model) {
 					return $elm$core$Maybe$Nothing;
 				} else {
 					var t = _v0.a;
-					var _v1 = t.aq;
+					var _v1 = t.as;
 					if (_v1.$ === 3) {
 						return model.aZ;
 					} else {
@@ -6888,7 +7516,7 @@ var $author$project$Update$clearTemporaryEffect = function (model) {
 		});
 };
 var $author$project$Types$PirateEncounter = function (a) {
-	return {$: 6, a: a};
+	return {$: 7, a: a};
 };
 var $elm$random$Random$Generator = $elm$core$Basics$identity;
 var $elm$random$Random$andThen = F2(
@@ -7296,7 +7924,7 @@ var $author$project$Update$handleDamage = F2(
 		return _Utils_update(
 			model,
 			{
-				aD: model.aD + A2($author$project$Data$Damage$damageAmount, model, t)
+				aE: model.aE + A2($author$project$Data$Damage$damageAmount, model, t)
 			});
 	});
 var $elm$core$Basics$min = F2(
@@ -7325,7 +7953,7 @@ var $author$project$Update$Resource$resourceMap = F2(
 									var s = sector.a;
 									return $author$project$Types$Mapped(
 										function () {
-											var _v1 = s.aS;
+											var _v1 = s.aT;
 											if (_v1.$ === 1) {
 												return s;
 											} else {
@@ -7333,7 +7961,7 @@ var $author$project$Update$Resource$resourceMap = F2(
 												return _Utils_update(
 													s,
 													{
-														aS: $author$project$Types$Discovered(
+														aT: $author$project$Types$Discovered(
 															A3(fn, rowNum, colNum, r))
 													});
 											}
@@ -7365,12 +7993,12 @@ var $author$project$Update$updateTurnStateAction = F2(
 					a1: $elm$core$Maybe$Just(
 						_Utils_update(
 							t,
-							{aq: action}))
+							{as: action}))
 				});
 		}
 	});
 var $author$project$Update$handleAnomaly = function (model) {
-	var _v0 = model.aN;
+	var _v0 = model.aO;
 	if (_v0.$ === 1) {
 		return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 	} else {
@@ -7380,15 +8008,15 @@ var $author$project$Update$handleAnomaly = function (model) {
 			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		} else {
 			var t = _v1.a;
-			var _v2 = t.aq;
+			var _v2 = t.as;
 			if (_v2.$ === 3) {
-				var _v3 = t.aU.aC;
+				var _v3 = t.aV.aD;
 				switch (_v3) {
 					case 1:
 						return _Utils_Tuple2(
 							A2(
 								$author$project$Update$updateTurnStateAction,
-								$author$project$Types$Move(t.aU.aB),
+								$author$project$Types$Move(t.aV.aC),
 								model),
 							$elm$core$Platform$Cmd$none);
 					case 2:
@@ -7404,28 +8032,23 @@ var $author$project$Update$handleAnomaly = function (model) {
 							A2($author$project$Update$handleDamage, model, t),
 							$elm$core$Platform$Cmd$none);
 					case 4:
-						var range = A2($elm$core$Basics$max, 1, (t.aU.aA / 2) | 0);
+						var range = A2($elm$core$Basics$max, 1, (t.aV.aB / 2) | 0);
 						var destroyResources = F3(
 							function (row, col, r) {
-								var _v4 = _Utils_cmp(
+								return (_Utils_cmp(
 									A2(
 										$author$project$Rules$gameDistance,
 										l,
-										{P: col, ah: row}),
-									range) < 1;
-								if (!_v4) {
-									return r;
-								} else {
-									return _Utils_update(
-										r,
-										{aw: 0});
-								}
+										{G: col, L: row}),
+									range) < 1) ? _Utils_update(
+									r,
+									{ay: 0}) : r;
 							});
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									aW: A2($author$project$Update$Resource$resourceMap, destroyResources, model.aW)
+									ak: A2($author$project$Update$Resource$resourceMap, destroyResources, model.ak)
 								}),
 							$elm$core$Platform$Cmd$none);
 					case 5:
@@ -7445,22 +8068,22 @@ var $author$project$Update$handleAnomaly = function (model) {
 							A2($author$project$Update$handleDamage, model, t),
 							$elm$core$Platform$Cmd$none);
 					case 8:
-						var minRow = A2($elm$core$Basics$max, 0, l.ah - t.aU.aA);
-						var minCol = A2($elm$core$Basics$max, 0, l.P - t.aU.aA);
-						var maxRow = A2($elm$core$Basics$min, $author$project$Types$maxSectorRow - 1, l.ah + t.aU.aA);
-						var maxCol = A2($elm$core$Basics$min, $author$project$Types$maxSectorCol - 1, l.P + t.aU.aA);
+						var minRow = A2($elm$core$Basics$max, 0, l.L - t.aV.aB);
+						var minCol = A2($elm$core$Basics$max, 0, l.G - t.aV.aB);
+						var maxRow = A2($elm$core$Basics$min, $author$project$Types$maxSectorRow - 1, l.L + t.aV.aB);
+						var maxCol = A2($elm$core$Basics$min, $author$project$Types$maxSectorCol - 1, l.G + t.aV.aB);
 						var coordsList = A2(
 							$elm$core$List$concatMap,
 							function (row) {
 								return A2(
 									$elm$core$List$map,
 									function (col) {
-										return {P: col, ah: row};
+										return {G: col, L: row};
 									},
 									A2($elm$core$List$range, minCol, maxCol));
 							},
 							A2($elm$core$List$range, minRow, maxRow));
-						var generator = A2($elm_community$random_extra$Random$List$choices, t.aU.aB, coordsList);
+						var generator = A2($elm_community$random_extra$Random$List$choices, t.aV.aC, coordsList);
 						return _Utils_Tuple2(
 							model,
 							A2($elm$random$Random$generate, $author$project$Types$PirateEncounter, generator));
@@ -7473,7 +8096,6 @@ var $author$project$Update$handleAnomaly = function (model) {
 		}
 	}
 };
-var $elm$core$Elm$JsArray$unsafeSet = _JsArray_unsafeSet;
 var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
 		var pos = $elm$core$Array$bitMask & (index >>> shift);
@@ -7518,12 +8140,12 @@ var $elm$core$Array$set = F3(
 	});
 var $author$project$Update$Resource$resourceUpdate = F3(
 	function (fn, coords, sectors) {
-		var _v0 = A2($elm$core$Array$get, coords.ah, sectors);
+		var _v0 = A2($elm$core$Array$get, coords.L, sectors);
 		if (_v0.$ === 1) {
 			return sectors;
 		} else {
 			var row = _v0.a;
-			var _v1 = A2($elm$core$Array$get, coords.P, row);
+			var _v1 = A2($elm$core$Array$get, coords.G, row);
 			if (_v1.$ === 1) {
 				return sectors;
 			} else {
@@ -7532,22 +8154,22 @@ var $author$project$Update$Resource$resourceUpdate = F3(
 					return sectors;
 				} else {
 					var s = sector.a;
-					var _v3 = s.aS;
+					var _v3 = s.aT;
 					if (_v3.$ === 1) {
 						return sectors;
 					} else {
 						var r = _v3.a;
 						return A3(
 							$elm$core$Array$set,
-							coords.ah,
+							coords.L,
 							A3(
 								$elm$core$Array$set,
-								coords.P,
+								coords.G,
 								$author$project$Types$Mapped(
 									_Utils_update(
 										s,
 										{
-											aS: $author$project$Types$Discovered(
+											aT: $author$project$Types$Discovered(
 												fn(r))
 										})),
 								row),
@@ -7563,13 +8185,13 @@ var $author$project$Update$handleUpgradeProgress = F4(
 		var consumeResource = function (r) {
 			return _Utils_update(
 				r,
-				{aw: 0});
+				{ay: 0});
 		};
 		var resourceUpdateInModel = function (m) {
 			return _Utils_update(
 				m,
 				{
-					aW: A3($author$project$Update$Resource$resourceUpdate, consumeResource, location, m.aW)
+					ak: A3($author$project$Update$Resource$resourceUpdate, consumeResource, location, m.ak)
 				});
 		};
 		return resourceUpdateInModel(
@@ -7581,7 +8203,7 @@ var $author$project$Update$handleUpgradeProgress = F4(
 							{
 								F: _Utils_update(
 									totalProgress,
-									{at: model.F.at + data.aw})
+									{av: model.F.av + data.ay})
 							});
 					case 1:
 						return _Utils_update(
@@ -7589,7 +8211,7 @@ var $author$project$Update$handleUpgradeProgress = F4(
 							{
 								F: _Utils_update(
 									totalProgress,
-									{a_: model.F.a_ + data.aw})
+									{a_: model.F.a_ + data.ay})
 							});
 					case 2:
 						return _Utils_update(
@@ -7597,7 +8219,7 @@ var $author$project$Update$handleUpgradeProgress = F4(
 							{
 								F: _Utils_update(
 									totalProgress,
-									{aX: model.F.aX + data.aw})
+									{aX: model.F.aX + data.ay})
 							});
 					default:
 						return _Utils_update(
@@ -7605,7 +8227,7 @@ var $author$project$Update$handleUpgradeProgress = F4(
 							{
 								F: _Utils_update(
 									totalProgress,
-									{aV: model.F.aV + data.aw})
+									{aW: model.F.aW + data.ay})
 							});
 				}
 			}());
@@ -7613,10 +8235,7 @@ var $author$project$Update$handleUpgradeProgress = F4(
 var $author$project$Update$removeHoveredAction = function (model) {
 	return _Utils_update(
 		model,
-		{aK: $elm$core$Maybe$Nothing});
-};
-var $author$project$Types$Rolled = function (a) {
-	return {$: 2, a: a};
+		{aL: $elm$core$Maybe$Nothing});
 };
 var $elm$random$Random$map2 = F3(
 	function (func, _v0, _v1) {
@@ -7635,32 +8254,37 @@ var $elm$random$Random$map2 = F3(
 		};
 	});
 var $elm_community$random_extra$Random$Extra$andMap = $elm$random$Random$map2($elm$core$Basics$apR);
-var $author$project$Update$rollDice = A2(
-	$elm$random$Random$generate,
-	$author$project$Types$Rolled,
-	A2(
-		$elm_community$random_extra$Random$Extra$andMap,
-		A2($elm$random$Random$int, 1, 20),
+var $author$project$Update$rollDice = function (msg) {
+	return A2(
+		$elm$random$Random$generate,
+		msg,
 		A2(
 			$elm_community$random_extra$Random$Extra$andMap,
-			A2($elm$random$Random$int, 1, 12),
+			A2($elm$random$Random$int, 1, 20),
 			A2(
 				$elm_community$random_extra$Random$Extra$andMap,
-				A2($elm$random$Random$int, 0, 9),
+				A2($elm$random$Random$int, 1, 12),
 				A2(
 					$elm_community$random_extra$Random$Extra$andMap,
-					A2($elm$random$Random$int, 1, 8),
+					A2($elm$random$Random$int, 0, 9),
 					A2(
 						$elm_community$random_extra$Random$Extra$andMap,
-						A2($elm$random$Random$int, 1, 6),
+						A2($elm$random$Random$int, 1, 8),
 						A2(
 							$elm_community$random_extra$Random$Extra$andMap,
-							A2($elm$random$Random$int, 1, 4),
-							$elm$random$Random$constant(
-								F6(
-									function (d4, d6, d8, d10, d12, d20) {
-										return {ax: d10, ay: d12, az: d20, aA: d4, aB: d6, aC: d8};
-									})))))))));
+							A2($elm$random$Random$int, 1, 6),
+							A2(
+								$elm_community$random_extra$Random$Extra$andMap,
+								A2($elm$random$Random$int, 1, 4),
+								$elm$random$Random$constant(
+									F6(
+										function (d4, d6, d8, d10, d12, d20) {
+											return {R: d10, az: d12, aA: d20, aB: d4, aC: d6, aD: d8};
+										})))))))));
+};
+var $author$project$Types$RolledDuringMove = function (a) {
+	return {$: 3, a: a};
+};
 var $author$project$Update$consumeMovementPoints = F2(
 	function (movesLeft, sector) {
 		var _default = movesLeft - 1;
@@ -7668,7 +8292,7 @@ var $author$project$Update$consumeMovementPoints = F2(
 			return _default;
 		} else {
 			var s = sector.a;
-			var _v1 = s.G;
+			var _v1 = s.H;
 			if (_v1 === 3) {
 				return movesLeft - 2;
 			} else {
@@ -7686,23 +8310,13 @@ var $author$project$Update$enemySector = F2(
 				return damage;
 			} else {
 				var s = sector.a;
-				var _v2 = s.G;
+				var _v2 = s.H;
 				if (_v2 === 4) {
 					return damage + 1;
 				} else {
 					return damage;
 				}
 			}
-		}
-	});
-var $author$project$Update$Sector$getSector = F2(
-	function (model, coords) {
-		var _v0 = A2($elm$core$Array$get, coords.ah, model.aW);
-		if (_v0.$ === 1) {
-			return $elm$core$Maybe$Nothing;
-		} else {
-			var row = _v0.a;
-			return A2($elm$core$Array$get, coords.P, row);
 		}
 	});
 var $author$project$Types$Undiscovered = {$: 1};
@@ -7733,8 +8347,8 @@ var $author$project$Update$Sector$mapSector = F2(
 		} else {
 			return $author$project$Types$Mapped(
 				{
-					G: $author$project$Data$Sector$intToSectorKind(t.aU.aB),
-					aS: $author$project$Types$Undiscovered
+					H: $author$project$Data$Sector$intToSectorKind(t.aV.aC),
+					aT: $author$project$Types$Undiscovered
 				});
 		}
 	});
@@ -7748,11 +8362,11 @@ var $author$project$Update$Resource$resourceDiscoveryCount = function (activeEff
 	var _v0 = A2($elm$core$List$member, $author$project$Types$ResourceDiscoveryImproved, activeEffects);
 	if (!_v0) {
 		return function (t) {
-			return t.aU.ay;
+			return t.aV.az;
 		};
 	} else {
 		return function (t) {
-			return A2($elm$core$Basics$max, t.aU.ay, t.aU.az);
+			return A2($elm$core$Basics$max, t.aV.az, t.aV.aA);
 		};
 	}
 };
@@ -7776,7 +8390,7 @@ var $author$project$Update$Resource$resourceScan = F3(
 			return $author$project$Types$Unmapped;
 		} else {
 			var s = sector.a;
-			var _v1 = s.aS;
+			var _v1 = s.aT;
 			if (!_v1.$) {
 				return $author$project$Types$Mapped(s);
 			} else {
@@ -7784,10 +8398,10 @@ var $author$project$Update$Resource$resourceScan = F3(
 					_Utils_update(
 						s,
 						{
-							aS: $author$project$Types$Discovered(
+							aT: $author$project$Types$Discovered(
 								{
-									aw: count,
-									G: $author$project$Data$Resource$intToResourceKind(t.aU.aC)
+									ay: count,
+									H: $author$project$Data$Resource$intToResourceKind(t.aV.aD)
 								})
 						}));
 			}
@@ -7812,131 +8426,113 @@ var $author$project$Update$Sector$updateSector = F3(
 	function (updateFn, arr, coords) {
 		return A3(
 			$author$project$Update$Sector$arrayUpdate,
-			coords.ah,
+			coords.L,
 			function (row) {
-				return A3($author$project$Update$Sector$arrayUpdate, coords.P, updateFn, row);
+				return A3($author$project$Update$Sector$arrayUpdate, coords.G, updateFn, row);
 			},
 			arr);
 	});
 var $author$project$Update$scanningImproved = F4(
 	function (turnState, effects, coords, sectors) {
-		var _v0 = A2($elm$core$List$member, $author$project$Types$ScanningImproved, effects);
-		if (!_v0) {
-			return sectors;
-		} else {
-			return A3(
-				$author$project$Update$Sector$updateSector,
-				A2(
-					$elm$core$Basics$composeR,
-					$author$project$Update$Sector$mapSector(turnState),
-					A2($author$project$Update$Resource$resourceScan, effects, turnState)),
-				sectors,
-				coords);
-		}
+		return A2($elm$core$List$member, $author$project$Types$ScanningImproved, effects) ? A3(
+			$author$project$Update$Sector$updateSector,
+			A2(
+				$elm$core$Basics$composeR,
+				$author$project$Update$Sector$mapSector(turnState),
+				A2($author$project$Update$Resource$resourceScan, effects, turnState)),
+			sectors,
+			coords) : sectors;
 	});
 var $author$project$Update$sectorClicked = F2(
 	function (model, coords) {
 		var effects = $author$project$Data$Effect$activeEffects(model);
-		var _v0 = model.aN;
+		var _v0 = model.aO;
 		if (_v0.$ === 1) {
-			return _Utils_update(
-				model,
-				{
-					aN: $elm$core$Maybe$Just(coords)
-				});
+			return _Utils_Tuple2(
+				_Utils_update(
+					model,
+					{
+						aO: $elm$core$Maybe$Just(coords)
+					}),
+				$elm$core$Platform$Cmd$none);
 		} else {
 			var l = _v0.a;
 			var _v1 = model.a1;
 			if (_v1.$ === 1) {
-				return model;
+				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			} else {
 				var t = _v1.a;
-				var _v2 = t.aq;
+				var _v2 = t.as;
 				switch (_v2.$) {
 					case 4:
-						return model;
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					case 0:
 						var movesLeft = _v2.a;
-						var _v3 = A3($author$project$Rules$validMove, movesLeft, l, coords);
-						if (_v3) {
-							return _Utils_update(
+						return A3($author$project$Rules$validMove, movesLeft, l, coords) ? _Utils_Tuple2(
+							_Utils_update(
 								model,
 								{
-									aD: A2(
+									aE: A2(
 										$author$project$Update$enemySector,
-										A2($author$project$Update$Sector$getSector, model, coords),
-										model.aD),
-									aN: $elm$core$Maybe$Just(coords),
-									aW: A4($author$project$Update$scanningImproved, t, effects, coords, model.aW),
-									a1: function () {
-										switch (movesLeft) {
-											case 0:
-												return $elm$core$Maybe$Nothing;
-											case 1:
-												return $elm$core$Maybe$Nothing;
-											default:
-												return $elm$core$Maybe$Just(
-													_Utils_update(
-														t,
-														{
-															aq: $author$project$Types$Move(
-																A2(
-																	$author$project$Update$consumeMovementPoints,
-																	movesLeft,
-																	$author$project$Data$Sector$getCurrentSector(model)))
-														}));
-										}
-									}()
-								});
-						} else {
-							return model;
-						}
+										A2($author$project$Data$Sector$getSector, model, coords),
+										model.aE),
+									aO: $elm$core$Maybe$Just(coords),
+									ak: A4($author$project$Update$scanningImproved, t, effects, coords, model.ak),
+									a1: (A2(
+										$author$project$Update$consumeMovementPoints,
+										movesLeft,
+										$author$project$Data$Sector$getCurrentSector(model)) < 1) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(
+										_Utils_update(
+											t,
+											{
+												as: $author$project$Types$Move(
+													A2(
+														$author$project$Update$consumeMovementPoints,
+														movesLeft,
+														$author$project$Data$Sector$getCurrentSector(model)))
+											}))
+								}),
+							$author$project$Update$rollDice($author$project$Types$RolledDuringMove)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					case 1:
-						var _v5 = A2($author$project$Update$Sector$getSector, model, coords);
-						if (_v5.$ === 1) {
-							return model;
+						var _v3 = A2($author$project$Data$Sector$getSector, model, coords);
+						if (_v3.$ === 1) {
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 						} else {
-							var s = _v5.a;
-							var _v6 = A5($author$project$Rules$validMapSector, effects, t.aU.ax, s, l, coords);
-							if (_v6) {
-								return _Utils_update(
+							var s = _v3.a;
+							return A5($author$project$Rules$validMapSector, effects, t.aV.R, s, l, coords) ? _Utils_Tuple2(
+								_Utils_update(
 									model,
 									{
-										aW: A3(
+										ak: A3(
 											$author$project$Update$Sector$updateSector,
 											$author$project$Update$Sector$mapSector(t),
-											model.aW,
+											model.ak,
 											coords),
 										a1: $elm$core$Maybe$Nothing
-									});
-							} else {
-								return model;
-							}
+									}),
+								$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 						}
 					case 2:
-						var _v7 = A2($author$project$Update$Sector$getSector, model, coords);
-						if (_v7.$ === 1) {
-							return model;
+						var _v4 = A2($author$project$Data$Sector$getSector, model, coords);
+						if (_v4.$ === 1) {
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 						} else {
-							var s = _v7.a;
-							var _v8 = A6($author$project$Rules$validResourceScan, t, effects, t.aU.ax, s, l, coords);
-							if (!_v8) {
-								return model;
-							} else {
-								return _Utils_update(
+							var s = _v4.a;
+							return A6($author$project$Rules$validResourceScan, t, effects, t.aV.R, s, l, coords) ? _Utils_Tuple2(
+								_Utils_update(
 									model,
 									{
-										aW: A3(
+										ak: A3(
 											$author$project$Update$Sector$updateSector,
 											A2($author$project$Update$Resource$resourceScan, effects, t),
-											model.aW,
+											model.ak,
 											coords),
 										a1: $elm$core$Maybe$Nothing
-									});
-							}
+									}),
+								$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 						}
 					default:
-						return model;
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			}
 		}
@@ -7946,13 +8542,13 @@ var $author$project$Data$Upgrade$upgradeProgress = F2(
 	function (upgrade, model) {
 		switch (upgrade) {
 			case 0:
-				return model.F.at;
+				return model.F.av;
 			case 1:
 				return model.F.a_;
 			case 2:
 				return model.F.aX;
 			default:
-				return model.F.aV;
+				return model.F.aW;
 		}
 	});
 var $author$project$Data$Upgrade$upgradeToEffect = function (upgrade) {
@@ -7970,23 +8566,13 @@ var $author$project$Data$Upgrade$upgradeToEffect = function (upgrade) {
 var $author$project$Update$setUpgradeEffects = F2(
 	function (upgrade, model) {
 		var eff = $author$project$Data$Upgrade$upgradeToEffect(upgrade);
-		var _v0 = _Utils_cmp(
+		return (_Utils_cmp(
 			A2($author$project$Data$Upgrade$upgradeProgress, upgrade, model),
-			$author$project$Types$numResourcesToUpgrade) > -1;
-		if (!_v0) {
-			return model;
-		} else {
-			var _v1 = A2($elm$core$List$member, eff, model.aG);
-			if (_v1) {
-				return model;
-			} else {
-				return _Utils_update(
-					model,
-					{
-						aG: A2($elm$core$List$cons, eff, model.aG)
-					});
-			}
-		}
+			$author$project$Types$numResourcesToUpgrade) > -1) ? (A2($elm$core$List$member, eff, model.aH) ? model : _Utils_update(
+			model,
+			{
+				aH: A2($elm$core$List$cons, eff, model.aH)
+			})) : model;
 	});
 var $author$project$Update$updateTurnCounter = function (model) {
 	return _Utils_update(
@@ -7998,35 +8584,46 @@ var $author$project$Update$update = F2(
 		switch (msg.$) {
 			case 0:
 				var c = msg.a;
-				return _Utils_Tuple2(
-					A2($author$project$Update$sectorClicked, model, c),
-					$elm$core$Platform$Cmd$none);
+				return A2($author$project$Update$sectorClicked, model, c);
 			case 1:
-				var _v1 = _Utils_cmp(model.a0, $author$project$Types$maxTurns) > 0;
-				if (_v1) {
+				return (_Utils_cmp(model.a0, $author$project$Types$maxTurns) > 0) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{a1: $elm$core$Maybe$Nothing}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					$author$project$Update$updateTurnCounter(
+						A2(
+							$author$project$Update$setUpgradeEffects,
+							3,
+							A2(
+								$author$project$Update$setUpgradeEffects,
+								2,
+								A2(
+									$author$project$Update$setUpgradeEffects,
+									1,
+									A2(
+										$author$project$Update$setUpgradeEffects,
+										0,
+										$author$project$Update$clearTemporaryEffect(
+											$author$project$Update$removeHoveredAction(model))))))),
+					$author$project$Update$rollDice($author$project$Types$Rolled));
+			case 3:
+				var result = msg.a;
+				var _v1 = model.a1;
+				if (!_v1.$) {
+					var t = _v1.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{a1: $elm$core$Maybe$Nothing}),
+							{
+								a1: $elm$core$Maybe$Just(
+									_Utils_update(
+										t,
+										{aV: result}))
+							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
-					return _Utils_Tuple2(
-						$author$project$Update$updateTurnCounter(
-							A2(
-								$author$project$Update$setUpgradeEffects,
-								3,
-								A2(
-									$author$project$Update$setUpgradeEffects,
-									2,
-									A2(
-										$author$project$Update$setUpgradeEffects,
-										1,
-										A2(
-											$author$project$Update$setUpgradeEffects,
-											0,
-											$author$project$Update$clearTemporaryEffect(
-												$author$project$Update$removeHoveredAction(model))))))),
-						$author$project$Update$rollDice);
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 2:
 				var result = msg.a;
@@ -8036,73 +8633,68 @@ var $author$project$Update$update = F2(
 						{
 							a1: $elm$core$Maybe$Just(
 								{
-									aq: function () {
-										var _v2 = result.az;
+									as: function () {
+										var _v2 = result.aA;
 										if (_v2 === 20) {
 											return $author$project$Types$Anomaly;
 										} else {
 											return $author$project$Types$NoAction;
 										}
 									}(),
-									aU: result
+									aV: result
 								})
 						}));
-			case 3:
+			case 4:
 				var ha = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							aK: $elm$core$Maybe$Just(ha)
+							aL: $elm$core$Maybe$Just(ha)
 						}),
 					$elm$core$Platform$Cmd$none);
-			case 4:
+			case 5:
 				return _Utils_Tuple2(
 					$author$project$Update$removeHoveredAction(model),
 					$elm$core$Platform$Cmd$none);
-			case 5:
+			case 6:
 				var sa = msg.a;
 				return _Utils_Tuple2(
 					$author$project$Update$removeHoveredAction(
 						A2($author$project$Update$updateTurnStateAction, sa, model)),
 					$elm$core$Platform$Cmd$none);
-			case 6:
+			case 7:
 				var _v3 = msg.a;
 				var impactedCoordinates = _v3.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							aW: A2(
+							ak: A2(
 								$author$project$Update$Resource$resourceMap,
 								F3(
 									function (row, col, r) {
-										var _v4 = A2(
+										return A2(
 											$elm$core$List$member,
-											{P: col, ah: row},
-											impactedCoordinates);
-										if (!_v4) {
-											return r;
-										} else {
-											return _Utils_update(
-												r,
-												{aw: 0});
-										}
+											{G: col, L: row},
+											impactedCoordinates) ? _Utils_update(
+											r,
+											{ay: 0}) : r;
 									}),
-								model.aW)
+								model.ak)
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
-				var data = msg.a.aE;
-				var location = msg.a.aN;
-				var applyTo = msg.a.ar;
+				var data = msg.a.aF;
+				var location = msg.a.aO;
+				var applyTo = msg.a.at;
 				return _Utils_Tuple2(
 					A4($author$project$Update$handleUpgradeProgress, applyTo, data, location, model),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{aM: $author$project$Main$init, aY: $author$project$Main$subscriptions, a2: $author$project$Update$update, a3: $author$project$View$Board$board});
+	{aN: $author$project$Main$init, aY: $author$project$Main$subscriptions, a2: $author$project$Update$update, a3: $author$project$View$Board$board});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(
 		{}))(0)}});}(this));
