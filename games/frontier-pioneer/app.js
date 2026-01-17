@@ -6979,8 +6979,15 @@ var $author$project$View$Rules$movement = function (model) {
 					]))
 			]));
 };
+var $author$project$View$Rules$overview = A2(
+	$author$project$View$Rules$rulesSection,
+	'Overview',
+	_List_fromArray(
+		[
+			$elm$html$Html$text('\n            Frontier Pioneer is a simultaneous, roll-and-write game with a fixed number of rounds where players explore procedurally generated space\nsectors, scan for resources, and upgrade their ships. Players do not take turns; instead, they independently choose actions based on the\nresults of a shared dice pool. There are 30 rolls total for approximately 15min of play time.\n            ')
+		]));
 var $author$project$View$Rules$resourceDiscovery = function (model) {
-	var ruleText = '\n             Once a sector has been discovered it can be scanned for resources which can be collected by moving to that sector. You can scan the sector you\'re occupying.\n            ';
+	var ruleText = '\n             Once a sector has been mapped it can be scanned for resources which can be collected by moving to that sector. You can scan the sector you\'re occupying.\n            ';
 	return A2(
 		$author$project$View$Rules$rulesSection,
 		'Resource Discovery',
@@ -7200,11 +7207,12 @@ var $author$project$View$Rules$rules = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
+						$author$project$View$Rules$overview,
 						$author$project$View$Rules$movement(model),
 						$author$project$View$Rules$mapping(model),
 						$author$project$View$Rules$resourceDiscovery(model),
-						$author$project$View$Rules$upgrades(model),
-						$author$project$View$Rules$anomaly(model)
+						$author$project$View$Rules$anomaly(model),
+						$author$project$View$Rules$upgrades(model)
 					]))
 			]));
 };
